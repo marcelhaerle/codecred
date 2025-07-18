@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/auth";
+  const callbackUrl = searchParams.get("callbackUrl") || "/auth/dashboard";
 
   return (
     <div className="flex mt-24 w-full items-center justify-center">
