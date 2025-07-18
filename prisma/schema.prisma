@@ -22,6 +22,7 @@ model User {
 
   accounts Account[]
   sessions Session[]
+  links    Link[]
 }
 
 // The user's OAuth account
@@ -59,4 +60,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Link {
+  id        String   @id @default(cuid())
+  userId    String
+  url       String
+  title     String
+  position  Int
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
