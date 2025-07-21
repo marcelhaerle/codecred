@@ -1,0 +1,53 @@
+# Docker Compose file for setting up a local CodeCred development environment.
+# This file defines the application service (CodeCred itself) and a PostgreSQL
+# database service, allowing you to run the entire stack with a single command.
+
+version: '3.8'
+
+services:
+  # The CodeCred Next.js application service
+  app:
+    # Build the Docker image from the Dockerfile in the current directory.
+    # It's assumed you have a Dockerfile for your Next.js app.
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Forward the exposed port 3000 from the container to port 3000 on the host machine.
+    ports:
+      - "3000:3000"
+    # Load environment variables from the .env file in the root directory.
+    # This is where you define your database connection string, GitHub keys, etc.
+    env_file:
+      - .env
+    # This service depends on the 'db' service. Docker Compose will start the 'db'
+    # service before it starts the 'app' service.
+    depends_on:
+      - db
+    # Set a restart policy to always restart the container if it stops.
+    restart: always
+
+  # The PostgreSQL database service
+  db:
+    # Use the official PostgreSQL image from Docker Hub, version 14.
+    image: postgres:14-alpine
+    # Set a restart policy to always restart the container if it stops.
+    restart: always
+    # Load environment variables for the database.
+    # IMPORTANT: These values MUST match the ones used to construct the
+    # DATABASE_URL in your .env file for the 'app' service.
+    environment:
+      - POSTGRES_USER=codecred
+      - POSTGRES_PASSWORD=supersecretpassword
+      - POSTGRES_DB=codecred_db
+    # Map port 5432 in the container to port 5432 on the host machine.
+    # This allows you to connect to the database from your local machine with a GUI tool if needed.
+    ports:
+      - "5432:5432"
+    # Mount a volume to persist the database data. This ensures that your data
+    # is not lost when you stop or restart the container.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Define the named volume for persisting database data.
+volumes:
+  postgres_data:
