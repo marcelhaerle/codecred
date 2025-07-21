@@ -11,6 +11,8 @@ export default function Header() {
   const { data: session } = useSession();
   const callbackUrl = "/auth/dashboard";
 
+  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === 'true';
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-sm border-b border-gray-800">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -29,7 +31,7 @@ export default function Header() {
               <Link href="/auth/links" className="text-gray-400 hover:text-white transition-colors">Links</Link>
             </>
           )}
-          {!session && (
+          {!session && isSaas && (
             <>
               <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
               <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a>
