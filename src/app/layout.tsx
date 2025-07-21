@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
+
 import Providers from "@/app/providers";
-import Navbar from "@/components/Navbar";
-
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "CodeCred",
@@ -34,13 +25,12 @@ export default function RootLayout({
         <meta name="theme-color" content="#101828" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 dark:bg-gray-900 h-screen`}
+        className="bg-gray-950 text-gray-200 antialiased"
       >
         <Providers>
-          <header className="bg-gray-800 shadow-md">
-            <Navbar />
-          </header>
-          <main className="mx-auto px-4 py-8 text-gray-900 dark:text-gray-100">{children}</main>
+          <Header />
+          <main className="bg-gray-950 min-h-screen">{children}</main>
+          <Footer />
         </Providers>
       </body>
     </html>
