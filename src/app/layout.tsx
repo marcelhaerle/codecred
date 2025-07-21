@@ -4,7 +4,6 @@ import "./globals.css";
 
 import Providers from "@/app/providers";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 
 export const metadata: Metadata = {
   title: "CodeCred",
@@ -28,7 +27,6 @@ export default function RootLayout({
         className="bg-gray-950 text-gray-200 antialiased"
       >
         <Providers>
-          <Header />
           <main className="bg-gray-950 min-h-screen">{children}</main>
           <Footer />
         </Providers>

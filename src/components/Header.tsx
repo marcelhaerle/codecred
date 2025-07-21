@@ -25,13 +25,7 @@ export default function Header() {
           CodeCred
         </Link>
         <nav className="hidden md:flex items-center gap-6">
-          {session && (
-            <>
-              <Link href="/auth/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
-              <Link href="/auth/links" className="text-gray-400 hover:text-white transition-colors">Links</Link>
-            </>
-          )}
-          {!session && isSaas && (
+          {isSaas && (
             <>
               <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
               <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a>
