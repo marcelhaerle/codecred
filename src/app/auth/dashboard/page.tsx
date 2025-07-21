@@ -1,4 +1,4 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import GitHubBlock from "@/components/GithubBlock";
 import { getServerSession } from "next-auth";
 
