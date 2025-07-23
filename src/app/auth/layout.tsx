@@ -9,7 +9,7 @@ export default function RootLayout({
   return (
     <Providers>
       <AuthHeader />
-      <main className="bg-gray-950 min-h-screen mt-24">{children}</main>
+      <main className="bg-gray-950 min-h-screen mt-16">{children}</main>
     </Providers>
   );
 }

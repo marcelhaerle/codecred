@@ -2,6 +2,7 @@ import { AuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
+import { githubDarkTheme } from "./themes";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -16,6 +17,10 @@ export const authOptions: AuthOptions = {
           email: profile.email,
           image: profile.avatar_url,
           username: profile.login,
+          bio: profile.bio,
+          // Default theme for new users
+          theme: githubDarkTheme,
+          blocks: [], // Initialize with an empty array for blocks
         };
       },
     }),

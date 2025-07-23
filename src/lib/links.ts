@@ -22,3 +22,16 @@ export async function getLinks() {
     },
   });
 }
+
+export async function getLinksByUsername(username: string) {
+  return prisma.link.findMany({
+    where: {
+      user: {
+        username: username,
+      },
+    },
+    orderBy: {
+      position: "asc",
+    },
+  });
+}
