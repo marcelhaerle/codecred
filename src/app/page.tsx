@@ -1,5 +1,6 @@
 "use client";
 
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LoginPrompt from "@/components/LoginPrompt";
 import MarketingSections from "@/components/MarketingSections";
@@ -11,6 +12,7 @@ export default function Home() {
     <>
       <Header />
       {isSaas ? <MarketingSections /> : <LoginPrompt />}
+      <Footer />
     </>
   );
 }

@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import Providers from "@/app/providers";
-import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "CodeCred",
@@ -28,7 +27,6 @@ export default function RootLayout({
       >
         <Providers>
           <main className="bg-gray-950 min-h-screen">{children}</main>
-          <Footer />
         </Providers>
       </body>
     </html>
