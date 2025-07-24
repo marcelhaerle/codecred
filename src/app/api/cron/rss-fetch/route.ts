@@ -9,9 +9,8 @@ const MAX_FEED_AGE = 2 * 60 * 60 * 1000;
 
 export async function GET(req: NextRequest) {
   // --- 1. Security Check ---
-  // Protect the endpoint with a secret key passed as a query parameter.
-  const cronSecret = req.nextUrl.searchParams.get('cron_secret');
-  if (cronSecret !== process.env.CRON_SECRET) {
+  // Protect the endpoint with a secret key passed as a bearer token.
+  if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 

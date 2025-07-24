@@ -102,7 +102,7 @@ Add the following line to the file. This example schedules the job to run at the
 ```bash
 # This command uses curl to trigger the RSS feed update endpoint every hour.
 # The --silent and --output /dev/null flags prevent curl from printing output.
-0 * * * * curl --silent --output /dev/null "http://localhost:3000/api/cron/rss-fetch?cron_secret=YOUR_SECRET_KEY"
+0 * * * * curl -H "Accept: application/json" -H "Authorization: Bearer YOUR_SECRET_KEY" --silent --output /dev/null "http://localhost:3000/api/cron/rss-fetch"
 ```
 
 _Important:_
