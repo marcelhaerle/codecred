@@ -7,6 +7,7 @@ import { useState } from 'react';
 import LinksBlockOptions from './LinksBlockOptions';
 import GithubActivityBlockOptions from './GithubActivityBlockOptions';
 import GithubPinnedReposBlockOptions from './GithubPinnedReposBlockOptions';
+import RssFeedBlockOptions from './RssFeedBlockOptions';
 
 interface SlideInControlPanelProps {
   selectedBlock: ProfileBlock | null;
@@ -41,6 +42,7 @@ export default function SlideInControlPanel({ selectedBlock, onUpdateBlock, onDe
           {selectedBlock.type === 'LINKS' && <LinksBlockOptions block={selectedBlock as LinksBlock} onChange={setCurrentBlock} />}
           {selectedBlock.type === 'GITHUB_ACTIVITY' && <GithubActivityBlockOptions block={selectedBlock} onChange={setCurrentBlock} />}
           {selectedBlock.type === 'GITHUB_PINNED_REPOS' && <GithubPinnedReposBlockOptions block={selectedBlock} onChange={setCurrentBlock} />}
+          {selectedBlock.type === 'RSS_FEED' && <RssFeedBlockOptions block={selectedBlock} onChange={setCurrentBlock} />}
         </div>
       ) : (
         <div className="flex-grow flex items-center justify-center text-gray-500">

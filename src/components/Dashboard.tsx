@@ -7,6 +7,7 @@ import {
   LinksBlock,
   GithubPinnedReposBlock,
   GithubActivityBlock,
+  RssFeedBlock,
 } from "@/types/custom";
 import { useEffect, useState } from "react";
 import {
@@ -26,6 +27,7 @@ const availableBlocks = [
   { type: "LINKS", name: "Links" },
   { type: "GITHUB_PINNED_REPOS", name: "Pinned Repositories" },
   { type: "GITHUB_ACTIVITY", name: "GitHub Activity" },
+  { type: "RSS_FEED", name: "RSS Feed" }
 ];
 
 export default function Dashboard() {
@@ -80,7 +82,7 @@ export default function Dashboard() {
     saveProfile(updatedProfile);
   };
 
-  const handleAddBlock = async (blockType: "LINKS" | "GITHUB_PINNED_REPOS" | "GITHUB_ACTIVITY") => {
+  const handleAddBlock = async (blockType: "LINKS" | "GITHUB_PINNED_REPOS" | "GITHUB_ACTIVITY" | "RSS_FEED") => {
     if (!profile) return;
 
     let newBlock: ProfileBlock;
@@ -109,6 +111,14 @@ export default function Dashboard() {
         limit: 5,
       };
       newBlock = newGithubActivityBlock;
+    } else if (blockType === "RSS_FEED") {
+      const newRssFeedBlock: RssFeedBlock = {
+        id: UUID.create().toString(),
+        type: "RSS_FEED",
+        name: "RSS Feed",
+        limit: 10,
+      };
+      newBlock = newRssFeedBlock;
     } else {
       return;
     }

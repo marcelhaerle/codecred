@@ -22,7 +22,13 @@ export interface GithubActivityBlock extends BaseBlock {
   limit: number;
 }
 
-export type ProfileBlock = LinksBlock | GithubPinnedReposBlock | GithubActivityBlock;
+export interface RssFeedBlock extends BaseBlock {
+  type: 'RSS_FEED';
+  name: "RSS Feed";
+  limit: number;
+}
+
+export type ProfileBlock = LinksBlock | GithubPinnedReposBlock | GithubActivityBlock | RssFeedBlock;
 
 export interface ProfileLink {
   title: string;
@@ -101,4 +107,10 @@ export interface Profile {
   image?: string;
   theme: Theme;
   blocks: ProfileBlock[];
+}
+
+export interface RssFeed {
+  id: string;
+  url: string;
+  lastFetchedAt: Date | null;
 }
