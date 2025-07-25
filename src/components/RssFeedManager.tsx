@@ -4,6 +4,7 @@ import { RssFeed } from "@/types/custom";
 import { useEffect, useState } from "react";
 import RssFeedEditor from "./RssFeedEditor";
 import RssFeedList from "./RssFeedList";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function RssFeedManager() {
   const [rssFeeds, setRssFeeds] = useState<RssFeed[]>([]);
@@ -72,7 +73,7 @@ export default function RssFeedManager() {
   };
 
   if (loading) {
-    return <div>Loading RSS feeds...</div>;
+    return <LoadingSpinner />;
   }
 
   if (error) {
