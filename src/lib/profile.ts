@@ -1,6 +1,11 @@
 import { Prisma, PrismaClient } from "@/generated/prisma";
-import { Profile, ProfileBlock, Theme } from "@/types/custom";
+import { Article, BlockWithData, PinnedRepo, Profile, ProfileBlock, ProfileLink, Project, Theme } from "@/types/custom";
 import { githubDarkTheme } from "./themes";
+import { getLinksByUsername } from "./links";
+import { getProjectsByUsername } from "./projects";
+import { getCachedArticlesByUsername } from "./rss";
+import { getGithubActivity, getPinnedRepos } from "./github";
+import { ContributionsCollection } from "@/types/github";
 
 const prisma = new PrismaClient();
 
@@ -9,7 +14,7 @@ const prisma = new PrismaClient();
  * @param username The username of the user.
  * @returns The user's profile or null if not found.
  */
-export async function getProfile(username: string): Promise<Profile | null> {
+export async function getProfile(username: string): Promise<(Profile & { blocksWithData: BlockWithData[] }) | null> {
   const user = await prisma.user.findUnique({
     where: { username }
   });
@@ -18,32 +23,70 @@ export async function getProfile(username: string): Promise<Profile | null> {
     return null;
   }
 
+  // Die Logik für Theme und Blöcke bleibt gleich
   let userTheme: Theme = githubDarkTheme;
-
   if (user.theme && typeof user.theme === 'object' && !Array.isArray(user.theme)) {
-    const currentTheme = user.theme as Prisma.JsonObject;
-    userTheme = currentTheme as unknown as Theme;
-  } else {
-    throw new Error("Invalid theme format");
+    userTheme = user.theme as unknown as Theme;
   }
 
   let userBlocks: ProfileBlock[] = [];
-
   if (user.blocks && Array.isArray(user.blocks)) {
     userBlocks = user.blocks as unknown as ProfileBlock[];
-  } else if (user.blocks && typeof user.blocks === 'object') {
-    userBlocks = user.blocks as unknown as ProfileBlock[];
-  } else {
-    throw new Error("Invalid blocks format");
   }
 
-  const profile: Profile = {
+  const dataPromises = userBlocks.map(block => {
+    switch (block.type) {
+      case 'LINKS': return getLinksByUsername(username);
+      case 'GITHUB_ACTIVITY': return getGithubActivity(username);
+      case 'GITHUB_PINNED_REPOS': return getPinnedRepos(username);
+      case 'RSS_FEED': return getCachedArticlesByUsername(username);
+      case 'PROJECT_SHOWCASE': return getProjectsByUsername(username);
+      default: return Promise.resolve(null);
+    }
+  });
+  const results = await Promise.all(dataPromises);
+
+  const blocksWithData: BlockWithData[] = userBlocks.map((block, index) => {
+    const data = results[index];
+    switch (block.type) {
+      case 'LINKS':
+        return {
+          ...block,
+          data: data ? (data as ProfileLink[]) : [],
+        };
+      case 'GITHUB_ACTIVITY':
+        return {
+          ...block,
+          data: data ? (data as ContributionsCollection) : null,
+        };
+      case 'GITHUB_PINNED_REPOS':
+        return {
+          ...block,
+          data: data ? (data as PinnedRepo[]) : [],
+        };
+      case 'RSS_FEED':
+        return {
+          ...block,
+          data: data ? (data as Article[]) : [],
+        };
+      case 'PROJECT_SHOWCASE':
+        return {
+          ...block,
+          data: data ? (data as Project[]) : [],
+        };
+      default:
+        throw new Error(`Unknown block type: ${block}`);
+    }
+  });
+
+  const profile: Profile & { blocksWithData: BlockWithData[] } = {
     username: user.username,
     name: user?.name || "",
     bio: user?.bio || "",
     image: user?.image || "",
     theme: userTheme,
-    blocks: userBlocks,
+    blocks: userBlocks, // Die reine Konfiguration
+    blocksWithData: blocksWithData, // Konfiguration + dynamische Daten
   }
 
   return profile;

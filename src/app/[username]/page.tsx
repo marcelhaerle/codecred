@@ -1,14 +1,9 @@
 import BlockRenderer from "@/components/BlockRenderer";
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import { getProfile } from "@/lib/profile";
-import { BlockWithData } from "@/types/custom";
-import { env } from "process";
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const username = (await params).username;
-
-  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/blocks?username=${username}`);
-  const blocksWithData: BlockWithData[] = await res.json();
 
   const profile = await getProfile(username);
 
@@ -38,7 +33,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         backgroundColor: profile.theme.colors.pageBackground,
       }}>
         <ProfileHeader profile={profile} />
-        {profile && blocksWithData.map((block) => <BlockRenderer key={block.id} block={block} theme={profile.theme} />)}
+        {profile && profile.blocksWithData.map((block) => <BlockRenderer key={block.id} block={block} theme={profile.theme} />)}
       </div>
     </div >
   );

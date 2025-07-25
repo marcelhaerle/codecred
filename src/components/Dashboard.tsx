@@ -11,7 +11,7 @@ import {
   ProjectShowcaseBlock,
   BlockWithData,
 } from "@/types/custom";
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   AnimatePresence,
   useDragControls,
@@ -34,57 +34,52 @@ const availableBlocks = [
   { type: "PROJECT_SHOWCASE", name: "Project Showcase" }
 ];
 
-export default function Dashboard({ username }: { username: string }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [blocks, setBlocks] = useState<ProfileBlock[]>([]);
-  const [blocksWithData, setBlocksWithData] = useState<BlockWithData[]>([]);
+export default function Dashboard({ initialData }: { initialData: Profile & { blocksWithData: BlockWithData[] } }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [profile, setProfile] = useState<Profile | null>(initialData);
+  const [blocks, setBlocks] = useState<ProfileBlock[]>(initialData.blocks);
+  const [blocksWithData, setBlocksWithData] = useState<BlockWithData[]>(initialData.blocksWithData);
   const [selectedBlock, setSelectedBlock] = useState<ProfileBlock | null>(null);
   const [isAppearancePanelOpen, setAppearancePanelOpen] = useState(false);
   const [isAddBlockOpen, setAddBlockOpen] = useState(false);
 
-  const fetchProfileAndBlocks = useCallback(async () => {
+  const fetchProfile = async () => {
     setIsLoading(true);
 
     const response = await fetch("/api/profile");
     if (!response.ok) {
       console.error("Failed to fetch profile data");
+      setIsLoading(false);
       return;
     }
-    const profileData: Profile = await response.json();
-    setProfile(profileData);
-    setBlocks(profileData.blocks || []);
+    const profileData: Profile & { blocksWithData: BlockWithData[] } = await response.json();
 
-    const b = await fetch(`/api/blocks?username=${username}`);
-    if (!b.ok) {
-      console.error("Failed to fetch blocks data");
-      return;
-    }
-    const blocksData: BlockWithData[] = await b.json();
-    setBlocksWithData(blocksData || []);
+    setProfile(profileData);
+    setBlocks(profileData.blocks);
+    setBlocksWithData(profileData.blocksWithData);
 
     setIsLoading(false);
-  }, [username]);
+  };
 
-  const saveProfile = async (updatedProfile: Profile) => {
+  const saveProfile = async (updatedProfile: Profile, shouldFetch: boolean) => {
     try {
       const response = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedProfile),
       });
+
       if (!response.ok) {
         throw new Error("Failed to update profile");
       }
-      fetchProfileAndBlocks();
+
+      if (shouldFetch) {
+        fetchProfile();
+      }
     } catch (error) {
       console.error("Error saving profile:", error);
     }
   };
-
-  useEffect(() => {
-    fetchProfileAndBlocks();
-  }, [fetchProfileAndBlocks]);
 
   const dragControls = useDragControls();
 
@@ -98,7 +93,7 @@ export default function Dashboard({ username }: { username: string }) {
 
   const handleUpdateProfile = (updatedProfile: Profile) => {
     setProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    saveProfile(updatedProfile, false);
   };
 
   const handleAddBlock = async (blockType: "LINKS" | "GITHUB_PINNED_REPOS" | "GITHUB_ACTIVITY" | "RSS_FEED" | "PROJECT_SHOWCASE") => {
@@ -154,7 +149,7 @@ export default function Dashboard({ username }: { username: string }) {
 
     const updatedProfile = { ...profile, blocks: updatedBlocks };
     setProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    saveProfile(updatedProfile, true);
 
     setAddBlockOpen(false);
   };
@@ -170,7 +165,7 @@ export default function Dashboard({ username }: { username: string }) {
 
     const updatedProfile = { ...profile, blocks: updatedBlocks };
     setProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    saveProfile(updatedProfile, true);
   };
 
   const handleDeleteBlock = async () => {
@@ -184,7 +179,7 @@ export default function Dashboard({ username }: { username: string }) {
 
     const updatedProfile = { ...profile, blocks: updatedBlocks };
     setProfile(updatedProfile);
-    saveProfile(updatedProfile);
+    saveProfile(updatedProfile, true);
   };
 
   if (isLoading || !profile) {
