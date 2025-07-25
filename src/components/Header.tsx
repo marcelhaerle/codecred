@@ -1,14 +1,11 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import GithubIcon from "@/components/GithubIcon";
 import { signIn } from "next-auth/react";
-import LogoutButton from "./LogoutButton";
 
 export default function Header() {
-  const { data: session } = useSession();
   const callbackUrl = "/auth/dashboard";
 
   const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === 'true';
@@ -33,15 +30,10 @@ export default function Header() {
             </>
           )}
         </nav>
-        {!session && (
-          <button onClick={() => signIn("github", { callbackUrl })} className="bg-gray-800 hover:bg-gray-700 group flex items-center gap-2 text-white font-medium py-2 px-4 rounded-lg transition-colors">
-            <GithubIcon />
-            <span>Sign In</span>
-          </button>
-        )}
-        {session && (
-          <LogoutButton username={session.user.name} />
-        )}
+        <button onClick={() => signIn("github", { callbackUrl })} className="bg-gray-800 hover:bg-gray-700 group flex items-center gap-2 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+          <GithubIcon />
+          <span>Sign In</span>
+        </button>
       </div>
     </header>
   );
