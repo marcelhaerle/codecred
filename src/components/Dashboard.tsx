@@ -14,13 +14,11 @@ import {
 import { useState } from "react";
 import {
   AnimatePresence,
-  useDragControls,
   motion,
-  Reorder,
 } from "framer-motion";
 import SlideInControlPanel from "./SlideInControlPanel";
 import BlockRenderer from "./BlockRenderer";
-import { GripVertical, Palette, Plus } from "lucide-react";
+import { Palette, Plus, ChevronUp, ChevronDown } from "lucide-react";
 import AppearancePanel from "./AppearancePanel";
 import { getFontStyle } from "@/lib/themes";
 import ProfileHeader from "./profile/ProfileHeader";
@@ -81,7 +79,7 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
     }
   };
 
-  const dragControls = useDragControls();
+
 
   const handleBlockClick = (block: ProfileBlock) => {
     setSelectedBlock(block);
@@ -182,6 +180,28 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
     saveProfile(updatedProfile, true);
   };
 
+  const handleMoveBlock = (blockId: string, direction: 'up' | 'down') => {
+    if (!profile) return;
+
+    const index = blocks.findIndex((b) => b.id === blockId);
+    if (index === -1) return;
+
+    const newBlocks = [...blocks];
+    const [movedBlock] = newBlocks.splice(index, 1);
+
+    if (direction === 'up') {
+      newBlocks.splice(Math.max(0, index - 1), 0, movedBlock);
+    } else {
+      newBlocks.splice(Math.min(newBlocks.length, index + 1), 0, movedBlock);
+    }
+
+    setBlocks(newBlocks);
+
+    const updatedProfile = { ...profile, blocks: newBlocks };
+    setProfile(updatedProfile);
+    saveProfile(updatedProfile, true);
+  };
+
   if (isLoading || !profile) {
     return (<LoadingSpinner />);
   }
@@ -254,33 +274,41 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
       >
         <ProfileHeader profile={profile} />
 
-        <Reorder.Group
-          axis="y"
-          values={blocks}
-          onReorder={setBlocks}
-          className="space-y-4"
-        >
-          {blocksWithData.map((block) => (
-            <Reorder.Item
+        <div className="space-y-4">
+          {blocksWithData.map((block, index) => (
+            <div
               key={block.id}
-              value={block}
-              dragListener={false}
-              dragControls={dragControls}
               className="relative group cursor-pointer"
               onClick={() => handleBlockClick(block)}
             >
               <div className="flex items-center gap-3">
-                <div
-                  onPointerDown={(e) => dragControls.start(e)}
-                  className="text-gray-600 cursor-grab touch-none group-hover:text-white transition-colors p-2"
-                >
-                  <GripVertical className="w-6 h-6" />
+                <div className="flex flex-col items-center">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMoveBlock(block.id, 'up');
+                    }}
+                    disabled={index === 0}
+                    className="text-gray-600 hover:text-white disabled:text-gray-800 transition-colors p-1"
+                  >
+                    <ChevronUp className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleMoveBlock(block.id, 'down');
+                    }}
+                    disabled={index === blocks.length - 1}
+                    className="text-gray-600 hover:text-white disabled:text-gray-800 transition-colors p-1"
+                  >
+                    <ChevronDown className="w-5 h-5" />
+                  </button>
                 </div>
                 <BlockRenderer block={block} theme={profile.theme} />
               </div>
-            </Reorder.Item>
+            </div>
           ))}
-        </Reorder.Group>
+        </div>
       </main>
 
       {/* The Slide-in Panel, rendered conditionally */}
