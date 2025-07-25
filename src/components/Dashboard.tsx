@@ -23,6 +23,7 @@ import { GripVertical, Palette, Plus } from "lucide-react";
 import AppearancePanel from "./AppearancePanel";
 import { getFontStyle } from "@/lib/themes";
 import ProfileHeader from "./profile/ProfileHeader";
+import LoadingSpinner from "./LoadingSpinner";
 
 const availableBlocks = [
   { type: "LINKS", name: "Links" },
@@ -33,6 +34,7 @@ const availableBlocks = [
 ];
 
 export default function Dashboard() {
+  const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [blocks, setBlocks] = useState<ProfileBlock[]>([]);
   const [selectedBlock, setSelectedBlock] = useState<ProfileBlock | null>(null);
@@ -64,6 +66,7 @@ export default function Dashboard() {
       const profileData: Profile = await response.json();
       setProfile(profileData);
       setBlocks(profileData.blocks || []);
+      setIsLoading(false);
     };
 
     fetchProfile();
@@ -170,8 +173,8 @@ export default function Dashboard() {
     saveProfile(updatedProfile);
   };
 
-  if (!profile) {
-    return <div className="text-center text-gray-500">Loading...</div>;
+  if (isLoading || !profile) {
+    return (<LoadingSpinner />);
   }
 
   const unusedBlocks = availableBlocks.filter(
