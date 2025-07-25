@@ -57,6 +57,11 @@ export async function getGithubActivity(username: string): Promise<Contributions
     try {
       const res = await octokit.graphql<GitHubActivityResponse>(ActivityQuery, {
         username: username,
+        request: {
+          next: {
+            revalidate: 3600, // Cache for 1 hour
+          },
+        },
       });
 
       return res.user?.contributionsCollection || null;
@@ -96,7 +101,14 @@ export async function getPinnedRepos(username: string): Promise<PinnedRepo[]> {
   const octokit = new Octokit({ auth: process.env.GITHUB_PAT });
 
   try {
-    const res = await octokit.graphql<PinnedRepoResponse>(PinnedReposQuery, { username });
+    const res = await octokit.graphql<PinnedRepoResponse>(PinnedReposQuery, {
+      username,
+      request: {
+        next: {
+          revalidate: 3600, // Cache for 1 hour
+        },
+      },
+    });
 
     return res.user?.pinnedItems.nodes || [];
   } catch (error) {
