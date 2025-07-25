@@ -1,8 +1,9 @@
-import { GithubPinnedReposBlock, GithubActivityBlock, LinksBlock, ProfileBlock, Theme, RssFeedBlock } from "@/types/custom";
+import { GithubPinnedReposBlock, GithubActivityBlock, LinksBlock, ProfileBlock, Theme, RssFeedBlock, ProjectShowcaseBlock } from "@/types/custom";
 import LinksBlockRenderer from "./LinksBlockRenderer";
 import GitHubPinnedReposBlockRenderer from "./GithubPinnedReposBlockRenderer";
 import GitHubActivityBlockRenderer from "./GithubActivityBlockRenderer";
 import RssFeedBlockRenderer from "./RssFeedBlockRenderer";
+import ProjectShowcaseBlockRenderer from "./ProjectShowcaseBlockRenderer";
 
 export default function BlockRenderer({ username, block, theme }: { username: string, block: ProfileBlock, theme: Theme }) {
   const renderBlock = (block: ProfileBlock) => {
@@ -24,6 +25,11 @@ export default function BlockRenderer({ username, block, theme }: { username: st
         const rssFeedBlock = block as RssFeedBlock;
         return (
           <RssFeedBlockRenderer username={username} block={rssFeedBlock} theme={theme} />
+        );
+      case 'PROJECT_SHOWCASE':
+        const projectShowcaseBlock = block as ProjectShowcaseBlock;
+        return (
+          <ProjectShowcaseBlockRenderer username={username} block={projectShowcaseBlock} theme={theme} />
         );
       default:
         return null;

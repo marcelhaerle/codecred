@@ -23,6 +23,7 @@ export default function AuthHeader() {
           <Link href="/auth/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link>
           <Link href="/auth/links" className="text-gray-400 hover:text-white transition-colors">Links</Link>
           <Link href="/auth/rss" className="text-gray-400 hover:text-white transition-colors">RSS</Link>
+          <Link href="/auth/projects" className="text-gray-400 hover:text-white transition-colors">Projects</Link>
           <Link href={`/${session?.user.username}`} target="_blank" className="text-gray-400 hover:text-white transition-colors flex group">Profile</Link>
         </nav>
         <LogoutButton username={session?.user.name} />

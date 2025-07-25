@@ -28,7 +28,12 @@ export interface RssFeedBlock extends BaseBlock {
   limit: number;
 }
 
-export type ProfileBlock = LinksBlock | GithubPinnedReposBlock | GithubActivityBlock | RssFeedBlock;
+export interface ProjectShowcaseBlock extends BaseBlock {
+  type: 'PROJECT_SHOWCASE';
+  name: "Project Showcase";
+}
+
+export type ProfileBlock = LinksBlock | GithubPinnedReposBlock | GithubActivityBlock | RssFeedBlock | ProjectShowcaseBlock;
 
 export interface ProfileLink {
   title: string;
@@ -113,4 +118,15 @@ export interface RssFeed {
   id: string;
   url: string;
   lastFetchedAt: Date | null;
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl?: string;
+  liveDemoUrl?: string;
+  sourceCodeUrl?: string;
+  techStack: string[];
+  displayOrder: number;
 }
