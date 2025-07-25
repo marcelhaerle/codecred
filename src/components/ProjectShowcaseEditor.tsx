@@ -62,6 +62,8 @@ export default function ProjectShowcaseEditor({ initialProjects }: ProjectShowca
     setProjects(prev => prev.filter(p => p.id !== projectId));
   };
 
+  const submitEnabled = editingProject && editingProject.title && editingProject.description && techStackInput;
+
   if (editingProject) {
     return (
       // --- EDIT/ADD FORM ---
@@ -69,17 +71,36 @@ export default function ProjectShowcaseEditor({ initialProjects }: ProjectShowca
         <h3 className="text-lg font-bold text-white mb-4">{editingProject.id ? 'Edit Project' : 'Add New Project'}</h3>
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Project Title</label>
-            <input type="text" value={editingProject.title} onChange={e => setEditingProject({ ...editingProject, title: e.target.value })} className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white" />
+            <label className="block text-sm font-medium text-gray-300 mb-1">Project Title*</label>
+            <input
+              type="text"
+              value={editingProject.title}
+              onChange={e => setEditingProject({ ...editingProject, title: e.target.value })}
+              className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+              required
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Description</label>
-            <textarea value={editingProject.description} onChange={e => setEditingProject({ ...editingProject, description: e.target.value })} className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white" rows={4}></textarea>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Description*</label>
+            <textarea
+              value={editingProject.description}
+              onChange={e => setEditingProject({ ...editingProject, description: e.target.value })}
+              className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+              rows={4}
+              required
+            ></textarea>
           </div>
           <div className="flex gap-4">
             <div className="flex-1">
-              <label className="block text-sm font-medium text-gray-300 mb-1">Tech Stack (comma-separated)</label>
-              <input type="text" value={techStackInput} onChange={e => setTechStackInput(e.target.value)} className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white" placeholder="React, Next.js, Tailwind CSS" />
+              <label className="block text-sm font-medium text-gray-300 mb-1">Tech Stack (comma-separated)*</label>
+              <input
+                type="text"
+                value={techStackInput}
+                onChange={e => setTechStackInput(e.target.value)}
+                className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+                placeholder="React, Next.js, Tailwind CSS"
+                required
+              />
             </div>
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-300 mb-1">Display Order</label>
@@ -88,29 +109,47 @@ export default function ProjectShowcaseEditor({ initialProjects }: ProjectShowca
                 min="1"
                 value={editingProject.displayOrder}
                 onChange={e => setEditingProject({ ...editingProject, displayOrder: parseInt(e.target.value) })}
-                className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white"
+                className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Image URL</label>
-            <input type="url" value={editingProject.imageUrl} onChange={e => setEditingProject({ ...editingProject, imageUrl: e.target.value })} className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white" />
+            <input
+              type="url"
+              value={editingProject.imageUrl}
+              onChange={e => setEditingProject({ ...editingProject, imageUrl: e.target.value })}
+              className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+            />
           </div>
           <div className="flex gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-300 mb-1">Live Demo URL</label>
-              <input type="url" value={editingProject.liveDemoUrl} onChange={e => setEditingProject({ ...editingProject, liveDemoUrl: e.target.value })} className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white" />
+              <input
+                type="url"
+                value={editingProject.liveDemoUrl}
+                onChange={e => setEditingProject({ ...editingProject, liveDemoUrl: e.target.value })}
+                className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+              />
             </div>
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-300 mb-1">Source Code URL</label>
-              <input type="url" value={editingProject.sourceCodeUrl} onChange={e => setEditingProject({ ...editingProject, sourceCodeUrl: e.target.value })} className="w-full bg-brand-gray-900 border border-brand-gray-700 rounded-md p-2 text-white" />
+              <input
+                type="url"
+                value={editingProject.sourceCodeUrl}
+                onChange={e => setEditingProject({ ...editingProject, sourceCodeUrl: e.target.value })}
+                className="w-full bg-gray-900 border border-gray-700 rounded-md p-2 text-white"
+              />
             </div>
 
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <button onClick={() => setEditingProject(null)} className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg">Cancel</button>
-            <button onClick={handleSave} className="bg-blue-800 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg">Save Project</button>
+            {submitEnabled ?
+              <button onClick={handleSave} className="bg-blue-800 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg" disabled={!editingProject.title || !editingProject.description || !techStackInput}>Save Project</button>
+              : <span className="bg-gray-900 text-gray-300 font-bold py-2 px-4 rounded-lg">Save Project</span>
+            }
           </div>
         </div>
       </div>
