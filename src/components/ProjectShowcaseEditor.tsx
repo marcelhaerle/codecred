@@ -38,18 +38,19 @@ export default function ProjectShowcaseEditor({ initialProjects }: ProjectShowca
       techStack: techStackInput.split(',').map(tag => tag.trim()).filter(Boolean),
     } as Project;
 
-    await fetch('/api/projects', {
+    const res = await fetch('/api/projects', {
       method: editingProject.id ? 'PUT' : 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(projectToSave),
     });
+    const createdProject = await res.json();
 
     if (editingProject.id) {
       setProjects(prev => prev.map(p => (p.id === editingProject.id ? projectToSave : p)));
     } else {
-      setProjects(prev => [...prev, { ...projectToSave, id: crypto.randomUUID() }]);
+      setProjects(prev => [...prev, { ...projectToSave, id: createdProject.id }]);
     }
 
     setEditingProject(null);
