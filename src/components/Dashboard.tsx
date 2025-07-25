@@ -60,22 +60,19 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
   };
 
   const saveProfile = async (updatedProfile: Profile, shouldFetch: boolean) => {
-    try {
-      const response = await fetch("/api/profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProfile),
-      });
+    const response = await fetch("/api/profile", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedProfile),
+    });
 
-      if (!response.ok) {
-        throw new Error("Failed to update profile");
-      }
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to update profile");
+    }
 
-      if (shouldFetch) {
-        fetchProfile();
-      }
-    } catch (error) {
-      console.error("Error saving profile:", error);
+    if (shouldFetch) {
+      await fetchProfile();
     }
   };
 
@@ -96,6 +93,8 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
 
   const handleAddBlock = async (blockType: "LINKS" | "GITHUB_PINNED_REPOS" | "GITHUB_ACTIVITY" | "RSS_FEED" | "PROJECT_SHOWCASE") => {
     if (!profile) return;
+
+    const originalBlocks = [...blocks];
 
     let newBlock: ProfileBlock;
 
@@ -146,14 +145,21 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
     setBlocks(updatedBlocks);
 
     const updatedProfile = { ...profile, blocks: updatedBlocks };
-    setProfile(updatedProfile);
-    saveProfile(updatedProfile, true);
-
     setAddBlockOpen(false);
+
+    try {
+      await saveProfile(updatedProfile, true);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      setBlocks(originalBlocks);
+    }
   };
 
-  const handleUpdateBlock = (updatedBlock: ProfileBlock | null) => {
+  const handleUpdateBlock = async (updatedBlock: ProfileBlock | null) => {
     if (!profile || !updatedBlock) return;
+
+    const originalBlocks = [...blocks];
+    const originalBlocksWithData = [...blocksWithData];
 
     const updatedBlocks = blocks.map((block) =>
       block.id === updatedBlock.id ? updatedBlock : block
@@ -162,12 +168,21 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
     setSelectedBlock(null);
 
     const updatedProfile = { ...profile, blocks: updatedBlocks };
-    setProfile(updatedProfile);
-    saveProfile(updatedProfile, true);
+
+    try {
+      await saveProfile(updatedProfile, true);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      setBlocks(originalBlocks);
+      setBlocksWithData(originalBlocksWithData);
+    }
   };
 
   const handleDeleteBlock = async () => {
     if (!selectedBlock || !profile) return;
+
+    const originalBlocks = [...blocks];
+    const originalBlocksWithData = [...blocksWithData];
 
     const updatedBlocks = blocks.filter(
       (block) => block.id !== selectedBlock.id
@@ -176,30 +191,47 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
     setSelectedBlock(null);
 
     const updatedProfile = { ...profile, blocks: updatedBlocks };
-    setProfile(updatedProfile);
-    saveProfile(updatedProfile, true);
+
+    try {
+      await saveProfile(updatedProfile, true);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      setBlocks(originalBlocks);
+      setBlocksWithData(originalBlocksWithData);
+    }
   };
 
-  const handleMoveBlock = (blockId: string, direction: 'up' | 'down') => {
+  const handleMoveBlock = async (blockId: string, direction: 'up' | 'down') => {
     if (!profile) return;
+
+    const originalBlocks = [...blocks];
+    const originalBlocksWithData = [...blocksWithData];
 
     const index = blocks.findIndex((b) => b.id === blockId);
     if (index === -1) return;
 
     const newBlocks = [...blocks];
     const [movedBlock] = newBlocks.splice(index, 1);
+    const newBlocksWithData = [...blocksWithData];
+    const [movedBlockWithData] = newBlocksWithData.splice(index, 1);
 
-    if (direction === 'up') {
-      newBlocks.splice(Math.max(0, index - 1), 0, movedBlock);
-    } else {
-      newBlocks.splice(Math.min(newBlocks.length, index + 1), 0, movedBlock);
-    }
+    const newIndex = direction === 'up' ? Math.max(0, index - 1) : Math.min(newBlocks.length, index + 1);
+    
+    newBlocks.splice(newIndex, 0, movedBlock);
+    newBlocksWithData.splice(newIndex, 0, movedBlockWithData);
 
     setBlocks(newBlocks);
+    setBlocksWithData(newBlocksWithData);
 
     const updatedProfile = { ...profile, blocks: newBlocks };
-    setProfile(updatedProfile);
-    saveProfile(updatedProfile, true);
+
+    try {
+      await saveProfile(updatedProfile, false);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      setBlocks(originalBlocks);
+      setBlocksWithData(originalBlocksWithData);
+    }
   };
 
   if (isLoading || !profile) {
