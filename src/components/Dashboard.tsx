@@ -9,8 +9,9 @@ import {
   GithubActivityBlock,
   RssFeedBlock,
   ProjectShowcaseBlock,
+  BlockWithData,
 } from "@/types/custom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   AnimatePresence,
   useDragControls,
@@ -33,13 +34,37 @@ const availableBlocks = [
   { type: "PROJECT_SHOWCASE", name: "Project Showcase" }
 ];
 
-export default function Dashboard() {
+export default function Dashboard({ username }: { username: string }) {
   const [isLoading, setIsLoading] = useState(true);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [blocks, setBlocks] = useState<ProfileBlock[]>([]);
+  const [blocksWithData, setBlocksWithData] = useState<BlockWithData[]>([]);
   const [selectedBlock, setSelectedBlock] = useState<ProfileBlock | null>(null);
   const [isAppearancePanelOpen, setAppearancePanelOpen] = useState(false);
   const [isAddBlockOpen, setAddBlockOpen] = useState(false);
+
+  const fetchProfileAndBlocks = useCallback(async () => {
+    setIsLoading(true);
+
+    const response = await fetch("/api/profile");
+    if (!response.ok) {
+      console.error("Failed to fetch profile data");
+      return;
+    }
+    const profileData: Profile = await response.json();
+    setProfile(profileData);
+    setBlocks(profileData.blocks || []);
+
+    const b = await fetch(`/api/blocks?username=${username}`);
+    if (!b.ok) {
+      console.error("Failed to fetch blocks data");
+      return;
+    }
+    const blocksData: BlockWithData[] = await b.json();
+    setBlocksWithData(blocksData || []);
+
+    setIsLoading(false);
+  }, [username]);
 
   const saveProfile = async (updatedProfile: Profile) => {
     try {
@@ -51,26 +76,15 @@ export default function Dashboard() {
       if (!response.ok) {
         throw new Error("Failed to update profile");
       }
+      fetchProfileAndBlocks();
     } catch (error) {
       console.error("Error saving profile:", error);
     }
   };
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const response = await fetch("/api/profile");
-      if (!response.ok) {
-        console.error("Failed to fetch profile data");
-        return;
-      }
-      const profileData: Profile = await response.json();
-      setProfile(profileData);
-      setBlocks(profileData.blocks || []);
-      setIsLoading(false);
-    };
-
-    fetchProfile();
-  }, []);
+    fetchProfileAndBlocks();
+  }, [fetchProfileAndBlocks]);
 
   const dragControls = useDragControls();
 
@@ -251,7 +265,7 @@ export default function Dashboard() {
           onReorder={setBlocks}
           className="space-y-4"
         >
-          {blocks.map((block) => (
+          {blocksWithData.map((block) => (
             <Reorder.Item
               key={block.id}
               value={block}
@@ -267,7 +281,7 @@ export default function Dashboard() {
                 >
                   <GripVertical className="w-6 h-6" />
                 </div>
-                <BlockRenderer username={profile.username} block={block} theme={profile.theme} />
+                <BlockRenderer block={block} theme={profile.theme} />
               </div>
             </Reorder.Item>
           ))}

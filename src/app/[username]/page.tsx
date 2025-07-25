@@ -1,20 +1,18 @@
 import BlockRenderer from "@/components/BlockRenderer";
 import ProfileHeader from "@/components/profile/ProfileHeader";
-import { PrismaClient } from "@/generated/prisma";
 import { getProfile } from "@/lib/profile";
-
-const prisma = new PrismaClient();
+import { BlockWithData } from "@/types/custom";
+import { env } from "process";
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const username = (await params).username;
 
-  const user = await prisma.user.findUnique({
-    where: { username: username },
-  });
+  const res = await fetch(`${env.NEXT_PUBLIC_API_URL}/api/blocks?username=${username}`);
+  const blocksWithData: BlockWithData[] = await res.json();
 
   const profile = await getProfile(username);
 
-  if (!user || !profile) {
+  if (!profile) {
     return (
       <div className="w-6xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">User not found</h1>
@@ -25,7 +23,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
   return (
     <div style={{
       width: "100%",
-      height: "100vh",
+      height: "100%",
+      minHeight: "100vh",
       backgroundColor: profile.theme.colors.pageBackground,
       padding: "2rem 0",
     }}>
@@ -39,9 +38,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
         backgroundColor: profile.theme.colors.pageBackground,
       }}>
         <ProfileHeader profile={profile} />
-        {profile && profile.blocks.map((block) => <BlockRenderer key={block.id} username={profile.username} block={block} theme={profile.theme} />)}
+        {profile && blocksWithData.map((block) => <BlockRenderer key={block.id} block={block} theme={profile.theme} />)}
       </div>
     </div >
-
   );
 }

@@ -57,3 +57,21 @@ export interface GitHubActivityResponse {
     contributionsCollection: ContributionsCollection;
   } | null; // User can be null if not found
 }
+
+export interface PinnedRepoResponse {
+  user: {
+    pinnedItems: {
+      nodes: Array<{
+        name: string;
+        description: string;
+        stargazerCount: number;
+        forkCount: number;
+        url: string;
+        primaryLanguage: {
+          name: string;
+          color: string;
+        } | null;
+      }>;
+    };
+  }
+}

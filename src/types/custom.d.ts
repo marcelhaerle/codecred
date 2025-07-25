@@ -35,6 +35,13 @@ export interface ProjectShowcaseBlock extends BaseBlock {
 
 export type ProfileBlock = LinksBlock | GithubPinnedReposBlock | GithubActivityBlock | RssFeedBlock | ProjectShowcaseBlock;
 
+export type BlockWithData =
+  | LinksBlock & { data: ProfileLink[] }
+  | GithubPinnedReposBlock & { data: PinnedRepo[] }
+  | GithubActivityBlock & { data: ContributionsCollection | null }
+  | RssFeedBlock & { data: Article[] }
+  | ProjectShowcaseBlock & { data: Project[] };
+
 export interface ProfileLink {
   title: string;
   url: string;
@@ -114,10 +121,30 @@ export interface Profile {
   blocks: ProfileBlock[];
 }
 
+export interface PinnedRepo {
+  name: string;
+  description: string;
+  stargazerCount: number;
+  forkCount: number;
+  url: string;
+  primaryLanguage: {
+    name: string;
+    color: string;
+  } | null;
+}
+
 export interface RssFeed {
   id: string;
   url: string;
   lastFetchedAt: Date | null;
+}
+
+export interface Article {
+  title: string;
+  link: string;
+  pubDate: string; // ISO date string
+  snippet?: string;
+  imageUrl?: string;
 }
 
 export interface Project {

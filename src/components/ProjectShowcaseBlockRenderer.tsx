@@ -2,37 +2,20 @@
 
 import { Project, ProjectShowcaseBlock, Theme } from '@/types/custom';
 import { Briefcase, ArrowUpRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
 import GithubIcon from './GithubIcon';
 import Image from 'next/image';
 
 interface ProjectShowcaseBlockProps {
-  username: string;
   block: ProjectShowcaseBlock;
-  theme: Theme
+  theme: Theme;
+  data: Project[];
 }
 
 const imageLoader = ({ src }: { src: string }) => {
   return src;
 }
 
-export default function ProjectShowcaseBlockRenderer({ username, theme }: ProjectShowcaseBlockProps) {
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const response = await fetch(`/api/p/projects?username=${username}`);
-      if (!response.ok) {
-        console.error("Failed to fetch projects");
-        return;
-      }
-      const data = await response.json();
-      setProjects(data);
-    };
-
-    fetchProjects();
-  }, [username]);
-
+export default function ProjectShowcaseBlockRenderer({ data: projects, theme }: ProjectShowcaseBlockProps) {
   return (
     <div className="w-full">
       <h3 className="text-xl font-bold mb-4">Project Showcase</h3>

@@ -1,12 +1,9 @@
 import { PrismaClient } from "@/generated/prisma";
+import { Article } from "@/types/custom";
 
 const prisma = new PrismaClient();
 
-export async function getCachedArticlesByUsername(username: string) {
-  if (!username) {
-    throw new Error("Username is required");
-  }
-
+export async function getCachedArticlesByUsername(username: string): Promise<Article[]> {
   const articles = await prisma.cachedArticle.findMany({
     where: {
       feed: {
@@ -17,5 +14,11 @@ export async function getCachedArticlesByUsername(username: string) {
     },
   });
 
-  return articles;
+  return articles.map((article) => ({
+    title: article.title,
+    link: article.link,
+    pubDate: article.pubDate instanceof Date ? article.pubDate.toISOString() : article.pubDate,
+    snippet: article.snippet || "",
+    imageUrl: article.imageUrl || "",
+  }));
 }

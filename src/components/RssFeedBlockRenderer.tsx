@@ -1,49 +1,15 @@
 "use client";
 
-import { RssFeedBlock, Theme } from '@/types/custom';
+import { Article, RssFeedBlock, Theme } from '@/types/custom';
 import { Rss } from 'lucide-react';
-import { useEffect, useState } from 'react';
-
-/**
- * Represents a single parsed article from the cache.
- */
-interface Article {
-  title: string;
-  link: string;
-  pubDate: string; // ISO date string
-  snippet?: string;
-  imageUrl?: string;
-}
 
 interface RssFeedBlockProps {
-  username: string;
   block: RssFeedBlock;
   theme: Theme;
+  data: Article[];
 }
 
-export default function RssFeedBlockRenderer({ username, block, theme }: RssFeedBlockProps) {
-  const [articles, setArticles] = useState<Article[]>([]);
-
-  useEffect(() => {
-    async function fetchArticles() {
-      const res = await fetch(`/api/p/rss?username=${username}`, {
-        cache: 'no-store', // Ensure we always get the latest data
-      });
-      if (!res.ok) {
-        console.error('Failed to fetch RSS articles:', res.statusText);
-        return;
-      }
-      const articles: Article[] = await res.json();
-
-      const articlesToShow = articles
-        .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-        .slice(0, block.limit);
-
-      setArticles(articlesToShow);
-    }
-    fetchArticles();
-  }, [username, block]);
-
+export default function RssFeedBlockRenderer({ data: articles, block, theme }: RssFeedBlockProps) {
   // Helper to format date nicely
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -68,7 +34,7 @@ export default function RssFeedBlockRenderer({ username, block, theme }: RssFeed
       </h3>
       {articles.length > 0 ? (
         <div className="space-y-4">
-          {articles.map((article, index) => (
+          {articles.slice(0, block.limit).map((article, index) => (
             <div key={index} className="p-2">
 
               <div className="flex-grow">
@@ -86,7 +52,6 @@ export default function RssFeedBlockRenderer({ username, block, theme }: RssFeed
                 </p>
               </div>
             </div>
-
           ))}
         </div>
       ) : (

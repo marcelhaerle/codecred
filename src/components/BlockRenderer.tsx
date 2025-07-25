@@ -1,35 +1,35 @@
-import { GithubPinnedReposBlock, GithubActivityBlock, LinksBlock, ProfileBlock, Theme, RssFeedBlock, ProjectShowcaseBlock } from "@/types/custom";
+import { GithubPinnedReposBlock, GithubActivityBlock, LinksBlock, Theme, RssFeedBlock, ProjectShowcaseBlock, BlockWithData } from "@/types/custom";
 import LinksBlockRenderer from "./LinksBlockRenderer";
 import GitHubPinnedReposBlockRenderer from "./GithubPinnedReposBlockRenderer";
 import GitHubActivityBlockRenderer from "./GithubActivityBlockRenderer";
 import RssFeedBlockRenderer from "./RssFeedBlockRenderer";
 import ProjectShowcaseBlockRenderer from "./ProjectShowcaseBlockRenderer";
 
-export default function BlockRenderer({ username, block, theme }: { username: string, block: ProfileBlock, theme: Theme }) {
-  const renderBlock = (block: ProfileBlock) => {
+export default function BlockRenderer({ block, theme }: { block: BlockWithData, theme: Theme }) {
+  const renderBlock = (block: BlockWithData) => {
     switch (block.type) {
       case 'LINKS':
         const linksBlock = block as LinksBlock;
-        return <LinksBlockRenderer username={username} block={linksBlock} theme={theme} />;
+        return <LinksBlockRenderer data={block.data} block={linksBlock} theme={theme} />;
       case 'GITHUB_PINNED_REPOS':
         const githubBlock = block as GithubPinnedReposBlock;
         return (
-          <GitHubPinnedReposBlockRenderer username={username} block={githubBlock} theme={theme} />
+          <GitHubPinnedReposBlockRenderer data={block.data} block={githubBlock} theme={theme} />
         );
       case 'GITHUB_ACTIVITY':
         const githubActivityBlock = block as GithubActivityBlock;
         return (
-          <GitHubActivityBlockRenderer username={username} block={githubActivityBlock} theme={theme} />
+          <GitHubActivityBlockRenderer data={block.data} block={githubActivityBlock} theme={theme} />
         );
       case 'RSS_FEED':
         const rssFeedBlock = block as RssFeedBlock;
         return (
-          <RssFeedBlockRenderer username={username} block={rssFeedBlock} theme={theme} />
+          <RssFeedBlockRenderer data={block.data} block={rssFeedBlock} theme={theme} />
         );
       case 'PROJECT_SHOWCASE':
         const projectShowcaseBlock = block as ProjectShowcaseBlock;
         return (
-          <ProjectShowcaseBlockRenderer username={username} block={projectShowcaseBlock} theme={theme} />
+          <ProjectShowcaseBlockRenderer data={block.data} block={projectShowcaseBlock} theme={theme} />
         );
       default:
         return null;

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { GitCommit, GitPullRequest, MessageSquare } from 'lucide-react';
-import type { ContributionsCollection, GitHubActivityResponse } from '@/types/github';
+import type { ContributionsCollection } from '@/types/github';
 import GithubIcon from './GithubIcon';
 import { GithubActivityBlock, Theme } from '@/types/custom';
 
@@ -37,42 +37,14 @@ const formatRelativeTime = (date: Date): string => {
   return Math.floor(seconds) + " seconds ago";
 };
 
-
 interface GitHubActivityProps {
-  username: string;
   block: GithubActivityBlock;
   theme: Theme;
   limit?: number;
+  data: ContributionsCollection | null;
 }
 
-export default function GitHubActivityBlockRenderer({ username, block, theme }: GitHubActivityProps) {
-  const [contributions, setContributions] = useState<ContributionsCollection | null>(null);
-
-  useEffect(() => {
-    async function fetchActivity() {
-      const res = await fetch(`/api/p/githubactivity?username=${username}`, {
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (res.ok) {
-        const data: GitHubActivityResponse = await res.json();
-        setContributions(data.user?.contributionsCollection || null);
-      } else {
-        console.error("Failed to fetch GitHub activity");
-      }
-    }
-
-    fetchActivity();
-  }, [username]);
-
-  /**
-   * This hook processes the raw API data and transforms it into a
-   * single, sorted list of activities. It only recalculates when the
-   * response data changes.
-   */
+export default function GitHubActivityBlockRenderer({ data: contributions, block, theme }: GitHubActivityProps) {
   const recentActivities = useMemo<ActivityItem[]>(() => {
     if (!contributions) return [];
 
