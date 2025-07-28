@@ -1,8 +1,9 @@
-import { AuthOptions } from "next-auth";
+import { AuthOptions, getServerSession } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 import { githubDarkTheme } from "./themes";
+import { User } from "@/generated/prisma";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -51,4 +52,18 @@ export const authOptions: AuthOptions = {
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
+}
+
+export async function getCurrentUser(): Promise<User | null> {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
+    return null;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+  });
+
+  return user;
 }

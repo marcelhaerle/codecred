@@ -10,17 +10,19 @@ datasource db {
 
 // The User model represents a user in the system
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  bio           String?   @db.Text
-  username      String    @unique
-  theme         Json      @default("{}") // Stores theme settings as JSON
-  blocks        Json      @default("[]") // Stores block order and settings as JSON
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id                    String    @id @default(cuid())
+  name                  String?
+  email                 String?   @unique
+  emailVerified         DateTime?
+  image                 String?
+  bio                   String?   @db.Text
+  username              String    @unique
+  theme                 Json      @default("{}") // Stores theme settings as JSON
+  blocks                Json      @default("[]") // Stores block order and settings as JSON
+  termsAccepted         Boolean   @default(false)
+  privacyPolicyAccepted Boolean   @default(false)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   accounts Account[]
   sessions Session[]

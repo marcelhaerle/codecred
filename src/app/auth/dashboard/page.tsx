@@ -1,11 +1,24 @@
 import Dashboard from "@/components/Dashboard";
 import DashboardFallback from "@/components/DashboardFallback";
-import { authOptions } from "@/lib/auth";
+import { authOptions, getCurrentUser } from "@/lib/auth";
 import { getProfile } from "@/lib/profile";
 import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function DashboardPage() {
+  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
+
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return redirect("/");
+  }
+
+  if (isSaas && (!user.privacyPolicyAccepted || !user.termsAccepted)) {
+    return redirect("/auth/agreement");
+  }
+
   const session = await getServerSession(authOptions);
   const profile = await getProfile(session?.user?.username || "");
 
