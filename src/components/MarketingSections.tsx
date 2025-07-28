@@ -152,7 +152,7 @@ export default function MarketingSections() {
             <div className="bg-gray-800 border border-gray-800 rounded-2xl p-8 flex flex-col h-full">
               <h3 className="text-2xl font-bold text-white">Free</h3>
               <p className="text-gray-400 mt-2 mb-6">For hobbyists and developers who want full control.</p>
-              <div className="text-4xl font-extrabold text-white mb-6">$0 <span className="text-xl font-medium text-gray-400">/ forever</span></div>
+              <div className="text-4xl font-extrabold text-white mb-6">&euro;0 <span className="text-xl font-medium text-gray-400">/ forever</span></div>
               <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
                 <li className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-green-500" />
@@ -180,7 +180,7 @@ export default function MarketingSections() {
               </div>
               <h3 className="text-2xl font-bold text-white">Starter</h3>
               <p className="text-gray-400 mt-2 mb-6">Students, hobbyists, or developers who want a live profile without the hassle of self-hosting.</p>
-              <div className="text-4xl font-extrabold text-white mb-6">~$3 <span className="text-xl font-medium text-gray-400">/ month</span></div>
+              <div className="text-4xl font-extrabold text-white mb-6">~&euro;3 <span className="text-xl font-medium text-gray-400">/ month</span></div>
               <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
                 <li className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-green-500" />
@@ -201,7 +201,7 @@ export default function MarketingSections() {
             <div className="bg-gray-800 border rounded-2xl p-8 flex flex-col h-full relative border-blue-800 shadow-2xl shadow-blue-500/10">
               <h3 className="text-2xl font-bold text-white">Pro</h3>
               <p className="text-gray-400 mt-2 mb-6">For the professional freelancer, consultant, or job-seeker.</p>
-              <div className="text-4xl font-extrabold text-white mb-6">~$7 <span className="text-xl font-medium text-gray-400">/ month</span></div>
+              <div className="text-4xl font-extrabold text-white mb-6">~&euro;7 <span className="text-xl font-medium text-gray-400">/ month</span></div>
               <ul className="space-y-4 text-gray-300 mb-8 flex-grow">
                 <li className="flex items-center gap-3">
                   <Check className="w-5 h-5 text-green-500" />
