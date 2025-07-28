@@ -24,9 +24,9 @@ export default function Header() {
         <nav className="hidden md:flex items-center gap-6">
           {isSaas && (
             <>
-              <a href="#features" className="text-gray-400 hover:text-white transition-colors">Features</a>
-              <a href="#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</a>
-              <a href="#open-source" className="text-gray-400 hover:text-white transition-colors">Open Source</a>
+              <Link href="/#features" className="text-gray-400 hover:text-white transition-colors">Features</Link>
+              <Link href="/#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link>
+              <Link href="/#open-source" className="text-gray-400 hover:text-white transition-colors">Open Source</Link>
             </>
           )}
         </nav>
