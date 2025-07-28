@@ -13,6 +13,10 @@ export default function Footer() {
           <Link href="/terms-of-use" className="text-gray-400 hover:text-white hover:underline">
             Terms of Use
           </Link>
+          <span className="mx-2">|</span>
+          <Link href="/privacy-policy" className="text-gray-400 hover:text-white hover:underline">
+            Privacy Policy
+          </Link>
         </div>
       )}
     </footer>
