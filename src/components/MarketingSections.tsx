@@ -147,6 +147,7 @@ export default function MarketingSections() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-white">Simple, Transparent Pricing.</h2>
+            <p className="text-gray-400 mt-2">Please note: Paid subscriptions are currently only available to citizens of the European Union.</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-6xl mx-auto items-stretch">
             <div className="bg-gray-800 border border-gray-800 rounded-2xl p-8 flex flex-col h-full">
