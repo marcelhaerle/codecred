@@ -251,7 +251,7 @@ export default function Dashboard({ initialData }: { initialData: Profile & { bl
         fontFamily: getFontStyle(profile.theme.typography.fontFamily),
       }}
     >
-      <div className="sticky top-24 z-50 bg-transparent p-4">
+      <div className="bg-transparent px-4 pt-12">
         <div className="w-full max-w-3xl mx-auto flex items-center justify-between mb-8">
           <button
             onClick={() => setAppearancePanelOpen(true)}
