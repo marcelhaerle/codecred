@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LoginPrompt from "@/components/LoginPrompt";
-import MarketingSections from "@/components/MarketingSections";
+import MarketingSections from "@/components/saas/MarketingSections";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
