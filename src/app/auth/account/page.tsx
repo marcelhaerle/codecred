@@ -1,0 +1,40 @@
+import SaasAccountManagement from "@/components/saas/SaasAccountManagement";
+import { getCurrentUser } from "@/lib/auth";
+import { getSubscriptionStatus } from "@/lib/subscription";
+import { Account } from "@/types/custom";
+import { redirect } from "next/navigation";
+
+const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
+
+export default async function AccountPage() {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return redirect("/");
+  }
+
+  if (isSaas && (!user.privacyPolicyAccepted || !user.termsAccepted)) {
+    return redirect("/auth/agreement");
+  }
+
+  const subscription = await getSubscriptionStatus(user.id);
+  const account: Account = {
+    id: user.id,
+    email: user.email || "",
+    username: user.username,
+    name: user.name || "",
+    bio: user.bio || "",
+    image: user.image || "",
+    scheduledForDeletion: user.scheduledForDeletion ? new Date(user.scheduledForDeletion).toISOString() : null,
+  }
+
+  return (
+    <div className="max-w-6xl mx-auto mt-24 p-4">
+      <h1 className="text-3xl md:text-4xl font-bold tracking-tighter text-white">Account Settings</h1>
+      <p className="text-gray-400 mt-2">
+        Manage your account settings and preferences here.
+      </p>
+      {isSaas && <SaasAccountManagement account={account} subscription={subscription} />}
+    </div>
+  );
+}

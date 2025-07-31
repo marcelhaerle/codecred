@@ -21,6 +21,7 @@ model User {
   blocks                Json      @default("[]") // Stores block order and settings as JSON
   termsAccepted         Boolean   @default(false)
   privacyPolicyAccepted Boolean   @default(false)
+  scheduledForDeletion  DateTime? // If set, user is scheduled for deletion
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 

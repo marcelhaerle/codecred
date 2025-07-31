@@ -157,3 +157,13 @@ export interface Project {
   techStack: string[];
   displayOrder: number;
 }
+
+export interface Account {
+  id: string;
+  email: string;
+  username: string;
+  name?: string;
+  bio?: string;
+  image?: string;
+  scheduledForDeletion?: string | null; // If the account is scheduled for deletion, this will be the date
+}
