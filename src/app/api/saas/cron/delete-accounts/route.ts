@@ -1,0 +1,35 @@
+import { PrismaClient } from "@/generated/prisma";
+import { NextRequest, NextResponse } from "next/server";
+
+const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
+
+const prisma = new PrismaClient();
+
+export async function GET(req: NextRequest) {
+  if (!isSaas) {
+    return NextResponse.json({ error: "Not SaaS version" }, { status: 400 });
+  }
+
+  // --- 1. Security Check ---
+  // Protect the endpoint with a secret key passed as a bearer token.
+  if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
+    return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { count } = await prisma.user.deleteMany({
+      where: {
+        scheduledForDeletion: {
+          lte: new Date(),
+        },
+      },
+    });
+
+    console.log(`Deleted ${count} accounts scheduled for deletion.`);
+
+    return NextResponse.json({ success: true, deletedCount: count }, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting accounts:", error);
+    return NextResponse.json({ error: "Failed to delete accounts" }, { status: 500 });
+  }
+}
