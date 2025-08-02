@@ -2,15 +2,15 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LoginPrompt from "@/components/LoginPrompt";
 import MarketingSections from "@/components/saas/MarketingSections";
-import { getServerSession } from "next-auth";
+import { getCurrentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
+const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === 'true';
+
 export default async function Home() {
-  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === 'true';
+  const user = await getCurrentUser();
 
-  const session = await getServerSession();
-
-  if (session?.user) {
+  if (user) {
     return redirect("/auth/dashboard");
   }
 

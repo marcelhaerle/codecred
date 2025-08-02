@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 
 export default function AgreementPage() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [privacyPolicyAccepted, setPrivacyPolicyAccepted] = useState(false);
-  const router = useRouter();
 
   const handleContinue = async () => {
     if (termsAccepted && privacyPolicyAccepted) {
@@ -16,7 +14,7 @@ export default function AgreementPage() {
           method: 'POST',
         });
         if (res.ok) {
-          router.push('/auth/dashboard');
+          signOut({ callbackUrl: '/auth/upgrade' });
         } else {
           console.error('Failed to accept agreement');
         }
@@ -39,11 +37,11 @@ export default function AgreementPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center">
-      <div className="bg-gray-800 rounded-lg p-8 max-w-2xl w-full">
-        <h1 className="text-3xl font-bold mb-6">Almost there!</h1>
-        <p className="text-gray-400 mb-6">Before you can start using CodeCred, please review and accept our terms of use and privacy policy.</p>
-        
+    <div className="min-h-screen bg-gray-900 text-white flex flex-col justify-center items-center p-8">
+      <div className="bg-gray-800 border rounded-2xl p-8 flex flex-col h-full relative border-blue-800 shadow-2xl shadow-blue-500/10">
+        <h1 className="text-2xl font-bold text-white">Almost there!</h1>
+        <p className="text-gray-400 mt-6 mb-6">Before you can start using CodeCred, please review and accept our terms of use and privacy policy.</p>
+
         <div className="space-y-4">
           <div>
             <label className="flex items-center">
@@ -68,6 +66,8 @@ export default function AgreementPage() {
             </label>
           </div>
         </div>
+
+        <p className="text-gray-400 mt-6 mb-6">You will be logged out. Just log in again and start using CodeCred!</p>
 
         <div className="mt-8 flex justify-end gap-4">
           <button

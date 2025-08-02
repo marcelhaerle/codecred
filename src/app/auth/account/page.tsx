@@ -1,32 +1,18 @@
 import SaasAccountManagement from "@/components/saas/SaasAccountManagement";
-import { getCurrentUser } from "@/lib/auth";
+import { getAccount } from "@/lib/account";
 import { getSubscriptionStatus } from "@/lib/subscription";
-import { Account } from "@/types/custom";
 import { redirect } from "next/navigation";
 
 const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
 
 export default async function AccountPage() {
-  const user = await getCurrentUser();
+  const account = await getAccount();
 
-  if (!user) {
+  if (!account) {
     return redirect("/");
   }
 
-  if (isSaas && (!user.privacyPolicyAccepted || !user.termsAccepted)) {
-    return redirect("/auth/agreement");
-  }
-
-  const subscription = await getSubscriptionStatus(user.id);
-  const account: Account = {
-    id: user.id,
-    email: user.email || "",
-    username: user.username,
-    name: user.name || "",
-    bio: user.bio || "",
-    image: user.image || "",
-    scheduledForDeletion: user.scheduledForDeletion ? new Date(user.scheduledForDeletion).toISOString() : null,
-  }
+  const subscription = await getSubscriptionStatus(account.id);
 
   return (
     <div className="max-w-6xl mx-auto mt-24 p-4">

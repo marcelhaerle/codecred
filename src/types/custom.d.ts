@@ -160,6 +160,8 @@ export interface Project {
 
 export interface Account {
   id: string;
+  termsAccepted: boolean;
+  privacyPolicyAccepted: boolean;
   email: string;
   username: string;
   name?: string;

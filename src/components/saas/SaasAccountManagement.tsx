@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Subscription } from "@/lib/subscription";
 import ManageSubscription from "./ManageSubscription";
 import { Account } from "@/types/custom";
-import DeleteAccount from "./DeleteAccount";
+import SaasDeleteAccount from "./SaasDeleteAccount";
 
 interface SaasAccountManagementProps {
   account: Account;
@@ -80,7 +80,7 @@ export default function SaasAccountManagement({ account: initialAccount, subscri
       }
 
       // 3. Schedule account deletion
-      const deleteResponse = await fetch("/api/saas/account", {
+      const deleteResponse = await fetch("/api/saas/account/schedule-for-deletion", {
         method: "DELETE",
         body: JSON.stringify({ expiresAt: canceledSubscription.expiresAt }),
         headers: {
@@ -118,7 +118,7 @@ export default function SaasAccountManagement({ account: initialAccount, subscri
           onError={setError}
         />
 
-        <DeleteAccount
+        <SaasDeleteAccount
           subscription={subscription}
           account={account}
           onConfirm={handleDeleteAccount}

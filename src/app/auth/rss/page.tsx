@@ -5,16 +5,10 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function RssPage() {
-  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
-
   const user = await getCurrentUser();
 
   if (!user) {
     return redirect("/");
-  }
-
-  if (isSaas && (!user.privacyPolicyAccepted || !user.termsAccepted)) {
-    return redirect("/auth/agreement");
   }
 
   return (

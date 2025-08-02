@@ -7,16 +7,10 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function DashboardPage() {
-  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
-
   const user = await getCurrentUser();
 
   if (!user) {
     return redirect("/");
-  }
-
-  if (isSaas && (!user.privacyPolicyAccepted || !user.termsAccepted)) {
-    return redirect("/auth/agreement");
   }
 
   const session = await getServerSession(authOptions);

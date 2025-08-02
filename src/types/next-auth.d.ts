@@ -11,6 +11,8 @@ declare module 'next-auth' {
 
   interface User {
     username?: string;
+    termsAccepted: boolean;
+    privacyPolicyAccepted: boolean;
   }
 }
 
@@ -19,5 +21,7 @@ declare module 'next-auth/jwt' {
     accessToken?: string;
     id?: string;
     username?: string;
+    termsAccepted: boolean;
+    privacyPolicyAccepted: boolean;
   }
 }

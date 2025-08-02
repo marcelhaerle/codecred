@@ -22,6 +22,8 @@ export const authOptions: AuthOptions = {
           // Default theme for new users
           theme: githubDarkTheme,
           blocks: [], // Initialize with an empty array for blocks
+          termsAccepted: profile.termsAccepted,
+          privacyPolicyAccepted: profile.privacyPolicyAccepted,
         };
       },
     }),
@@ -38,6 +40,8 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.id = user.id;
         token.username = user.username;
+        token.termsAccepted = user.termsAccepted;
+        token.privacyPolicyAccepted = user.privacyPolicyAccepted;
       }
       return token;
     },
