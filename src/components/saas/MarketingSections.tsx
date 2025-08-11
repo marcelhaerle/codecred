@@ -1,8 +1,9 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { Star, Layers, RefreshCw, ShieldCheck, Check, Zap, Globe, EyeOff, BarChart2, Headphones, Github, Rss, LayoutTemplate, Palette } from 'lucide-react';
-
+import { Star, Layers, RefreshCw, ShieldCheck, Check, Zap, Globe, EyeOff, BarChart2, Headphones, Github, Rss, LayoutTemplate, Palette, Share2 } from 'lucide-react';
+import GithubIcon from "../GithubIcon";
+import BlockIcon from "../BlockIcon";
 
 export default function MarketingSections() {
   const callbackUrl = "/auth/dashboard";
@@ -107,6 +108,39 @@ export default function MarketingSections() {
                 <h3 className="text-2xl font-bold text-white">Full Customization</h3>
               </div>
               <p className="text-gray-400">Choose from developer-centric themes like Dracula and Solarized, or use custom CSS to create a truly unique design.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works" className="py-16 md:py-24 bg-gray-950">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Your Developer Portfolio, <span className="bg-gradient-to-r from-blue-500 to-blue-800 bg-clip-text text-transparent">Automated</span>.</h2>
+            <p className="mt-4 text-lg text-slate-400 max-w-2xl mx-auto">Build your live portfolio in minutes. Almost no manual data entry.</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto text-center">
+            <div className="flex flex-col items-center">
+              <div className="step-icon-bg p-6 rounded-full mb-4">
+                <GithubIcon className="text-blue-800 h-12 w-12" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">1. Connect with GitHub</h3>
+              <p className="text-slate-400">Sign in securely with GitHub. We use your profile for authentication, data, and your unique URL: <code className="bg-slate-800 text-blue-300 rounded px-1 py-0.5 text-sm">codecred.net/username</code>.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="step-icon-bg p-6 rounded-full mb-4">
+                <BlockIcon className="text-blue-600 h-12 w-12" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">2. Build with Blocks</h3>
+              <p className="text-slate-400">Assemble your profile with dynamic blocks. Showcase pinned repos, contribution graphs, blog feeds, and more with a simple interface.</p>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="step-icon-bg p-6 rounded-full mb-4">
+                <Share2 className="text-blue-500 h-12 w-12" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">3. Publish & Share</h3>
+              <p className="text-slate-400">Apply a theme, publish your page, and share your professional identity. Your profile stays up-to-date automatically as you work.</p>
             </div>
           </div>
         </div>
