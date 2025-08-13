@@ -1,7 +1,7 @@
 import { PrismaClient } from "@/generated/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
-import { Project } from "@/types/custom";
+import { Project } from "@/lib/types";
 
 const prisma = new PrismaClient();
 

@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 import { useState } from 'react';
 
 import { allThemes, githubDarkTheme } from '@/lib/themes';
-import { Profile } from '@/types/custom';
+import { Profile } from '@/lib/types';
 
 interface AppearancePanelProps {
   profile: Profile;

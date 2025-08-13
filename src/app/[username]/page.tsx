@@ -1,6 +1,6 @@
 import BlockRenderer from "@/components/BlockRenderer";
 import ProfileHeader from "@/components/profile/ProfileHeader";
-import { getProfile } from "@/lib/profile";
+import { getProfile } from "@/lib/services/profileService";
 
 export default async function ProfilePage({ params }: { params: Promise<{ username: string }> }) {
   const username = (await params).username;

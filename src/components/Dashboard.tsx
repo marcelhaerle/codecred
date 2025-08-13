@@ -10,7 +10,7 @@ import {
   RssFeedBlock,
   ProjectShowcaseBlock,
   BlockWithData,
-} from "@/types/custom";
+} from "@/lib/types";
 import { useState } from "react";
 import {
   AnimatePresence,

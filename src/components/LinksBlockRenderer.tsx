@@ -1,6 +1,6 @@
 "use client";
 
-import { LinksBlock, ProfileLink, Theme } from "@/types/custom";
+import { LinksBlock, ProfileLink, Theme } from "@/lib/types";
 import Link from "next/link";
 
 interface LinksBlockRendererProps {

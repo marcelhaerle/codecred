@@ -1,6 +1,6 @@
 "use client";
 
-import { RssFeedBlock } from "@/types/custom";
+import { RssFeedBlock } from "@/lib/types";
 import { useState } from "react";
 
 export default function RssFeedBlockOptions({ block, onChange }: { block: RssFeedBlock; onChange: (updatedBlock: RssFeedBlock) => void }) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { Project, ProjectShowcaseBlock, Theme } from '@/types/custom';
+import { Project, ProjectShowcaseBlock, Theme } from '@/lib/types';
 import { Briefcase, ArrowUpRight } from 'lucide-react';
 import GithubIcon from './GithubIcon';
 import Image from 'next/image';

@@ -1,6 +1,6 @@
 "use client";
 
-import { LinksBlock } from "@/types/custom";
+import { LinksBlock } from "@/lib/types";
 import { useState } from "react";
 
 export default function LinksBlockOptions({ block, onChange }: { block: LinksBlock; onChange: (updatedBlock: LinksBlock) => void }) {

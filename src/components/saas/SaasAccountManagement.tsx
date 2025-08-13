@@ -4,7 +4,7 @@ import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { Subscription } from "@/lib/subscription";
 import ManageSubscription from "./ManageSubscription";
-import { Account } from "@/types/custom";
+import { Account } from "@/lib/types";
 import SaasDeleteAccount from "./SaasDeleteAccount";
 
 interface SaasAccountManagementProps {

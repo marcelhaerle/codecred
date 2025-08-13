@@ -1,7 +1,7 @@
 import Dashboard from "@/components/Dashboard";
 import DashboardFallback from "@/components/DashboardFallback";
 import { authOptions, getCurrentUser } from "@/lib/auth";
-import { getProfile } from "@/lib/profile";
+import { getProfile } from "@/lib/services/profileService";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";

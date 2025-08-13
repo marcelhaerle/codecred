@@ -1,4 +1,4 @@
-import { Profile } from "@/types/custom";
+import { Profile } from "@/lib/types";
 import Image from "next/image";
 
 export default function ProfileHeader({ profile }: { profile: Profile }) {

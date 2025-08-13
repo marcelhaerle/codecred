@@ -1,8 +1,8 @@
 import { authOptions } from "@/lib/auth";
-import { getProfile, updateProfile } from "@/lib/profile";
+import { getProfile, updateProfile } from "@/lib/services/profileService";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { Profile } from "@/types/custom";
+import { Profile } from "@/lib/types";
 
 // API route to get user's profile
 // Example usage: GET /api/profile

@@ -1,6 +1,6 @@
 "use client";
 
-import { Account } from "@/types/custom";
+import { Account } from "@/lib/types";
 import DeleteAccountModal from "../DeleteAccountModal";
 import { Subscription } from "@/lib/subscription";
 

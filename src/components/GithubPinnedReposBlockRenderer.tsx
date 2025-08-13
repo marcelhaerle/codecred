@@ -1,6 +1,6 @@
 "use client";
 
-import { GithubPinnedReposBlock, PinnedRepo, Theme } from "@/types/custom";
+import { GithubPinnedReposBlock, PinnedRepo, Theme } from "@/lib/types";
 
 interface GithubPinnedReposBlockRendererProps {
   block: GithubPinnedReposBlock;

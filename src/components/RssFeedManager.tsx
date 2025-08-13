@@ -1,6 +1,6 @@
 "use client";
 
-import { RssFeed } from "@/types/custom";
+import { RssFeed } from "@/lib/types";
 import { useEffect, useState } from "react";
 import RssFeedEditor from "./RssFeedEditor";
 import RssFeedList from "./RssFeedList";

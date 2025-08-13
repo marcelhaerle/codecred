@@ -1,6 +1,6 @@
 "use client";
 
-import { Article, RssFeedBlock, Theme } from '@/types/custom';
+import { Article, RssFeedBlock, Theme } from '@/lib/types';
 import { Rss } from 'lucide-react';
 
 interface RssFeedBlockProps {

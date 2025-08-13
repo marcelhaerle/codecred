@@ -1,6 +1,6 @@
 "use client";
 
-import { ProjectShowcaseBlock } from "@/types/custom";
+import { ProjectShowcaseBlock } from "@/lib/types";
 
 interface ProjectShowcaseBlockOptionsProps {
   block: ProjectShowcaseBlock;

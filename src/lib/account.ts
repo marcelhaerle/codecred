@@ -1,4 +1,4 @@
-import { Account } from "@/types/custom";
+import { Account } from "@/lib/types";
 import { getCurrentUser } from "./auth"
 
 export async function getAccount(): Promise<Account | null> {

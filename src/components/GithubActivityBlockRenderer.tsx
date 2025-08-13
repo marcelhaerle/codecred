@@ -2,9 +2,8 @@
 
 import { useMemo } from 'react';
 import { GitCommit, GitPullRequest, MessageSquare } from 'lucide-react';
-import type { ContributionsCollection } from '@/types/github';
+import type { GithubActivityBlock, Theme, ContributionsCollection } from '@/lib/types';
 import GithubIcon from './GithubIcon';
-import { GithubActivityBlock, Theme } from '@/types/custom';
 
 /**
  * A unified type to represent any kind of activity item for easier rendering.

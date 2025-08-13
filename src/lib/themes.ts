@@ -1,4 +1,4 @@
-import { Theme } from "@/types/custom";
+import { Theme } from "@/lib/types";
 import { Inter, JetBrains_Mono, Source_Code_Pro, Fira_Code, Roboto_Mono } from 'next/font/google'
 
 // 1. Dracula Official Theme

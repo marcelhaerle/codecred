@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Plus, Trash2, Pen } from 'lucide-react';
-import { Project } from '@/types/custom';
+import { Project } from '@/lib/types';
 
 interface ProjectShowcaseEditorProps {
   initialProjects: Project[];

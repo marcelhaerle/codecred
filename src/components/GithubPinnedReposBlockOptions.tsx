@@ -1,6 +1,6 @@
 "use client";
 
-import { GithubPinnedReposBlock } from "@/types/custom";
+import { GithubPinnedReposBlock } from "@/lib/types";
 import { useState } from "react";
 
 export default function GithubPinnedReposBlockOptions({ block, onChange }: { block: GithubPinnedReposBlock; onChange: (updatedBlock: GithubPinnedReposBlock) => void }) {

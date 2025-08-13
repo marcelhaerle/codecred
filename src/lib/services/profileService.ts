@@ -1,11 +1,10 @@
 import { PrismaClient } from "@/generated/prisma";
-import { Article, BlockWithData, PinnedRepo, Profile, ProfileBlock, ProfileLink, Project, Theme } from "@/types/custom";
-import { githubDarkTheme } from "./themes";
-import { getLinksByUsername } from "./links";
-import { getProjectsByUsername } from "./projects";
-import { getGithubActivity, getPinnedRepos } from "./github";
-import { ContributionsCollection } from "@/types/github";
-import { rssFeedService } from "./services/rssFeedService";
+import { Article, BlockWithData, PinnedRepo, Profile, ProfileBlock, ProfileLink, Project, Theme, ContributionsCollection } from "@/lib/types";
+import { githubDarkTheme } from "@/lib/themes";
+import { getLinksByUsername } from "@/lib/links";
+import { getProjectsByUsername } from "@/lib/projects";
+import { getGithubActivity, getPinnedRepos } from "@/lib/github";
+import { rssFeedService } from "@/lib/services/rssFeedService";
 
 const prisma = new PrismaClient();
 
@@ -23,15 +22,14 @@ export async function getProfile(username: string): Promise<(Profile & { blocksW
     return null;
   }
 
-  // Die Logik für Theme und Blöcke bleibt gleich
   let userTheme: Theme = githubDarkTheme;
-  if (user.theme && typeof user.theme === 'object' && !Array.isArray(user.theme)) {
-    userTheme = user.theme as unknown as Theme;
+  if (user.theme && typeof JSON.parse(user.theme) === 'object' && !Array.isArray(JSON.parse(user.theme))) {
+    userTheme = JSON.parse(user.theme) as unknown as Theme;
   }
 
   let userBlocks: ProfileBlock[] = [];
-  if (user.blocks && Array.isArray(user.blocks)) {
-    userBlocks = user.blocks as unknown as ProfileBlock[];
+  if (user.blocks && Array.isArray(JSON.parse(user.blocks))) {
+    userBlocks = JSON.parse(user.blocks) as unknown as ProfileBlock[];
   }
 
   const dataPromises = userBlocks.map(block => {
@@ -85,8 +83,8 @@ export async function getProfile(username: string): Promise<(Profile & { blocksW
     bio: user?.bio || "",
     image: user?.image || "",
     theme: userTheme,
-    blocks: userBlocks, // Die reine Konfiguration
-    blocksWithData: blocksWithData, // Konfiguration + dynamische Daten
+    blocks: userBlocks,
+    blocksWithData: blocksWithData,
   }
 
   return profile;

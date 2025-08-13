@@ -1,4 +1,4 @@
-import { GithubPinnedReposBlock, GithubActivityBlock, LinksBlock, Theme, RssFeedBlock, ProjectShowcaseBlock, BlockWithData } from "@/types/custom";
+import { GithubPinnedReposBlock, GithubActivityBlock, LinksBlock, Theme, RssFeedBlock, ProjectShowcaseBlock, BlockWithData } from "@/lib/types";
 import LinksBlockRenderer from "./LinksBlockRenderer";
 import GitHubPinnedReposBlockRenderer from "./GithubPinnedReposBlockRenderer";
 import GitHubActivityBlockRenderer from "./GithubActivityBlockRenderer";

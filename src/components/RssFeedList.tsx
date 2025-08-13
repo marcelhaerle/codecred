@@ -1,6 +1,6 @@
 "use client";
 
-import { RssFeed } from "@/types/custom";
+import { RssFeed } from "@/lib/types";
 import { faTrash, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 

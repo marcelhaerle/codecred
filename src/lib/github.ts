@@ -1,5 +1,4 @@
-import { PinnedRepo } from "@/types/custom";
-import { ContributionsCollection, GitHubActivityResponse, PinnedRepoResponse } from "@/types/github";
+import { PinnedRepo, ContributionsCollection, GitHubActivityResponse, PinnedRepoResponse } from "@/lib/types";
 import { Octokit } from "@octokit/core";
 
 const ActivityQuery = `

@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import { LinksBlock, ProfileBlock } from "@/types/custom";
+import { LinksBlock, ProfileBlock } from "@/lib/types";
 import { useState } from 'react';
 import LinksBlockOptions from './LinksBlockOptions';
 import GithubActivityBlockOptions from './GithubActivityBlockOptions';

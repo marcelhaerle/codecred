@@ -1,6 +1,6 @@
 "use client";
 
-import { GithubActivityBlock } from "@/types/custom";
+import { GithubActivityBlock } from "@/lib/types";
 import { useState } from "react";
 
 export default function GithubActivityBlockOptions({ block, onChange }: { block: GithubActivityBlock; onChange: (updatedBlock: GithubActivityBlock) => void }) {
