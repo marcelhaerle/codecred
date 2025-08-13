@@ -1,9 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
-
-const prisma = new PrismaClient();
+import { rssFeedService } from "@/lib/services/rssFeedService";
 
 export async function GET() {
   const session = await getServerSession(authOptions);
@@ -12,17 +10,9 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const rssFeeds = await prisma.rssFeed.findMany({
-    where: {
-      userId: session.user.id,
-    },
-  });
+  const rssFeeds = await rssFeedService.getFeeds();
 
-  return NextResponse.json(rssFeeds.map(feed => ({
-    id: feed.id,
-    url: feed.url,
-    lastFetchedAt: feed.lastFetchedAt,
-  })));
+  return NextResponse.json(rssFeeds);
 }
 
 export async function POST(req: Request) {
@@ -38,16 +28,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
   }
 
-  const newFeed = await prisma.rssFeed.create({
-    data: {
-      url,
-      userId: session.user.id,
-    },
-  });
+  const newFeed = await rssFeedService.createFeed(url);
 
-  return NextResponse.json({
-    id: newFeed.id,
-    url: newFeed.url,
-    lastFetchedAt: newFeed.lastFetchedAt,
-  });
+  return NextResponse.json(newFeed);
 }

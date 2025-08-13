@@ -12,3 +12,17 @@ export interface User {
   termsAccepted: boolean;
   privacyPolicyAccepted: boolean;
 }
+
+export interface RssFeed {
+  id: string;
+  url: string;
+  lastFetchedAt: Date | null;
+}
+
+export interface CachedArticle {
+  title: string;
+  link: string;
+  pubDate: string;
+  snippet: string | null;
+  imageUrl: string | null;
+}

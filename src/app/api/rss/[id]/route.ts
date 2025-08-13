@@ -1,8 +1,6 @@
-import { PrismaClient } from "@/generated/prisma/client";
+import { rssFeedService } from "@/lib/services/rssFeedService";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession();
@@ -13,14 +11,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   const feedId = (await params).id;
 
-  await prisma.rssFeed.delete({
-    where: {
-      id: feedId,
-      user: {
-        id: session.user.id,
-      },
-    },
-  });
+  await rssFeedService.deleteFeed(feedId);
 
   return new NextResponse(null, { status: 204 });
 }

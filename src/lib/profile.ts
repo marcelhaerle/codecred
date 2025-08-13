@@ -3,9 +3,9 @@ import { Article, BlockWithData, PinnedRepo, Profile, ProfileBlock, ProfileLink,
 import { githubDarkTheme } from "./themes";
 import { getLinksByUsername } from "./links";
 import { getProjectsByUsername } from "./projects";
-import { getCachedArticlesByUsername } from "./rss";
 import { getGithubActivity, getPinnedRepos } from "./github";
 import { ContributionsCollection } from "@/types/github";
+import { rssFeedService } from "./services/rssFeedService";
 
 const prisma = new PrismaClient();
 
@@ -39,7 +39,7 @@ export async function getProfile(username: string): Promise<(Profile & { blocksW
       case 'LINKS': return getLinksByUsername(username);
       case 'GITHUB_ACTIVITY': return getGithubActivity(username);
       case 'GITHUB_PINNED_REPOS': return getPinnedRepos(username);
-      case 'RSS_FEED': return getCachedArticlesByUsername(username);
+      case 'RSS_FEED': return rssFeedService.getCachedArticlesByUsername(username);
       case 'PROJECT_SHOWCASE': return getProjectsByUsername(username);
       default: return Promise.resolve(null);
     }
