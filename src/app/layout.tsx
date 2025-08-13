@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Analytics } from '@vercel/analytics/next';
 
 import "./globals.css";
 
@@ -15,9 +14,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === 'true';
-
-
   return (
     <html lang="en">
       <head>
@@ -32,7 +28,6 @@ export default function RootLayout({
         <Providers>
           <main className="bg-gray-950 min-h-screen">{children}</main>
         </Providers>
-        {isSaas && <Analytics />}
       </body>
     </html>
   );

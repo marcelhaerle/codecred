@@ -1,4 +1,4 @@
-import SaasUpgradeManager from "@/components/saas/SaasUpgradeManager";
+import UpgradeManager from "@/components/subscription/UpgradeManager";
 import { userService } from "@/lib/services/userService";
 import { redirect } from "next/navigation";
 
@@ -11,7 +11,7 @@ export default async function UpgradePage() {
 
   return (
     <>
-      <SaasUpgradeManager />
+      <UpgradeManager />
     </>
   );
 }

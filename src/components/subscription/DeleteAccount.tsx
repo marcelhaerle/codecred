@@ -10,7 +10,7 @@ interface DeleteAccountProps {
   onConfirm: () => void;
 }
 
-export default function SaasDeleteAccount({ user, subscription, onConfirm }: DeleteAccountProps) {
+export default function DeleteAccount({ user, subscription, onConfirm }: DeleteAccountProps) {
   return (
     <div className="min-h-[200px]">
       {user.scheduledForDeletion ? (

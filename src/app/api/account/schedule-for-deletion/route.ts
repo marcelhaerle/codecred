@@ -3,8 +3,6 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
-
 const prisma = new PrismaClient();
 
 export async function DELETE(request: NextRequest) {
@@ -12,10 +10,6 @@ export async function DELETE(request: NextRequest) {
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  if (!isSaas) {
-    return NextResponse.json({ status: "NONE" }, { status: 400 });
   }
 
   const { expiresAt } = await request.json();

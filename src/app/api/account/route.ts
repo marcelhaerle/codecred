@@ -3,17 +3,11 @@ import { userService } from "@/lib/services/userService";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
-
 export async function GET() {
   const session = await getServerSession(authOptions);
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  if (!isSaas) {
-    return NextResponse.json({ status: "NONE" }, { status: 400 });
   }
 
   try {
@@ -35,10 +29,6 @@ export async function DELETE() {
 
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  if (!isSaas) {
-    return NextResponse.json({ status: "NONE" }, { status: 400 });
   }
 
   try {

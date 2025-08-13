@@ -5,14 +5,14 @@ import { useState } from "react";
 import { Subscription } from "@/lib/subscription";
 import ManageSubscription from "./ManageSubscription";
 import { User } from "@/lib/types";
-import SaasDeleteAccount from "./SaasDeleteAccount";
+import SaasDeleteAccount from "./DeleteAccount";
 
-interface SaasAccountManagementProps {
+interface AccountManagementProps {
   user: User;
   subscription: Subscription;
 }
 
-export default function SaasAccountManagement({ user: initialUser, subscription: initialSubscription }: SaasAccountManagementProps) {
+export default function AccountManagement({ user: initialUser, subscription: initialSubscription }: AccountManagementProps) {
   const [user, setUser] = useState<User>(initialUser);
   const [subscription, setSubscription] = useState<Subscription>(initialSubscription);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,7 +20,7 @@ export default function SaasAccountManagement({ user: initialUser, subscription:
 
   const fetchSubscription = async (): Promise<Subscription | null> => {
     try {
-      const response = await fetch("/api/saas/subscription/status");
+      const response = await fetch("/api/subscription/status");
 
       if (!response.ok) {
         throw new Error("Failed to fetch subscription status");
@@ -38,7 +38,7 @@ export default function SaasAccountManagement({ user: initialUser, subscription:
 
   const fetchAccount = async () => {
     try {
-      const response = await fetch("/api/saas/account");
+      const response = await fetch("/api/account");
 
       if (!response.ok) {
         setError("Failed to fetch account details");
@@ -64,7 +64,7 @@ export default function SaasAccountManagement({ user: initialUser, subscription:
 
     try {
       // 1. Cancel subscription
-      const cancelSubscriptionResponse = await fetch("/api/saas/subscription/cancel");
+      const cancelSubscriptionResponse = await fetch("/api/subscription/cancel");
 
       if (!cancelSubscriptionResponse.ok) {
         setError("Failed to cancel subscription");
@@ -80,7 +80,7 @@ export default function SaasAccountManagement({ user: initialUser, subscription:
       }
 
       // 3. Schedule account deletion
-      const deleteResponse = await fetch("/api/saas/account/schedule-for-deletion", {
+      const deleteResponse = await fetch("/api/account/schedule-for-deletion", {
         method: "DELETE",
         body: JSON.stringify({ expiresAt: canceledSubscription.expiresAt }),
         headers: {

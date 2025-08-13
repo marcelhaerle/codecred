@@ -1,15 +1,9 @@
 import { PrismaClient } from "@/generated/prisma";
 import { NextRequest, NextResponse } from "next/server";
 
-const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
-
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
-  if (!isSaas) {
-    return NextResponse.json({ error: "Not SaaS version" }, { status: 400 });
-  }
-
   // --- 1. Security Check ---
   // Protect the endpoint with a secret key passed as a bearer token.
   if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {

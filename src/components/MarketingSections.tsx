@@ -2,8 +2,8 @@
 
 import { signIn } from "next-auth/react";
 import { Star, Layers, RefreshCw, ShieldCheck, Check, Zap, Globe, EyeOff, BarChart2, Headphones, Github, Rss, LayoutTemplate, Palette, Share2 } from 'lucide-react';
-import GithubIcon from "../GithubIcon";
-import BlockIcon from "../BlockIcon";
+import GithubIcon from "@/components/GithubIcon";
+import BlockIcon from "@/components/BlockIcon";
 
 export default function MarketingSections() {
   const callbackUrl = "/auth/dashboard";

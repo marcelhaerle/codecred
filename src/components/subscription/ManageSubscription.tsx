@@ -17,7 +17,7 @@ export default function ManageSubscription({ subscription, isScheduledForDeletio
   const handleSubscriptionUpdate = async () => {
     setIsUpdating(true);
 
-    const response = await fetch("/api/saas/create-customer-portal-session");
+    const response = await fetch("/api/create-customer-portal-session");
 
     if (!response.ok) {
       setIsUpdating(false);

@@ -6,11 +6,11 @@ import { useState } from "react";
 import { signOut } from "next-auth/react";
 import DeleteAccount from "../DeleteAccount";
 
-export default function SaasUpgradeManager() {
+export default function UpgradeManager() {
   const [error, setError] = useState<string | null>(null);
 
   const handleDeleteAccount = async () => {
-    const response = await fetch("/api/saas/account", {
+    const response = await fetch("/api/account", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

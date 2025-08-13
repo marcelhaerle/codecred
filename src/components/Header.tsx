@@ -8,8 +8,6 @@ import { signIn } from "next-auth/react";
 export default function Header() {
   const callbackUrl = "/auth/dashboard";
 
-  const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === 'true';
-
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-gray-950/80 backdrop-blur-sm border-b border-gray-800">
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -22,13 +20,9 @@ export default function Header() {
           CodeCred
         </Link>
         <nav className="hidden md:flex items-center gap-6">
-          {isSaas && (
-            <>
-              <Link href="/#features" className="text-gray-400 hover:text-white transition-colors">Features</Link>
-              <Link href="/#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link>
-              <Link href="/#open-source" className="text-gray-400 hover:text-white transition-colors">Open Source</Link>
-            </>
-          )}
+          <Link href="/#features" className="text-gray-400 hover:text-white transition-colors">Features</Link>
+          <Link href="/#pricing" className="text-gray-400 hover:text-white transition-colors">Pricing</Link>
+          <Link href="/#open-source" className="text-gray-400 hover:text-white transition-colors">Open Source</Link>
         </nav>
         <button onClick={() => signIn("github", { callbackUrl })} className="bg-gray-800 hover:bg-gray-700 group flex items-center gap-2 text-white font-medium py-2 px-4 rounded-lg transition-colors">
           <GithubIcon />

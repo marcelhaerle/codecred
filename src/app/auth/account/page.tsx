@@ -1,9 +1,7 @@
-import SaasAccountManagement from "@/components/saas/SaasAccountManagement";
+import AccountManagement from "@/components/subscription/AccountManagement";
 import { userService } from "@/lib/services/userService";
 import { getSubscriptionStatus } from "@/lib/subscription";
 import { redirect } from "next/navigation";
-
-const isSaas = process.env.NEXT_PUBLIC_IS_SAAS_VERSION === "true";
 
 export default async function AccountPage() {
   const user = await userService.getCurrentUser();
@@ -20,7 +18,7 @@ export default async function AccountPage() {
       <p className="text-gray-400 mt-2">
         Manage your account settings and preferences here.
       </p>
-      {isSaas && <SaasAccountManagement user={user} subscription={subscription} />}
+      <AccountManagement user={user} subscription={subscription} />
     </div>
   );
 }
