@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from "@/generated/prisma";
+import { PrismaClient } from "@/generated/prisma";
 import { Article, BlockWithData, PinnedRepo, Profile, ProfileBlock, ProfileLink, Project, Theme } from "@/types/custom";
 import { githubDarkTheme } from "./themes";
 import { getLinksByUsername } from "./links";
@@ -105,8 +105,8 @@ export async function updateProfile(username: string, profileData: Partial<Profi
       name: profileData.name,
       bio: profileData.bio,
       image: profileData.image,
-      theme: profileData.theme as unknown as Prisma.JsonObject,
-      blocks: profileData.blocks as unknown as Prisma.JsonArray,
+      theme: JSON.stringify(profileData.theme),
+      blocks: JSON.stringify(profileData.blocks),
     },
   });
 

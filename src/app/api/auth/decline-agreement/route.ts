@@ -1,9 +1,8 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@/generated/prisma";
+import { userService } from "@/lib/services/userService";
 
-const prisma = new PrismaClient();
 
 export async function POST() {
   const session = await getServerSession(authOptions);
@@ -12,9 +11,7 @@ export async function POST() {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  await prisma.user.delete({
-    where: { id: session.user.id },
-  });
+  await userService.deleteUser(session.user.id);
 
   return new NextResponse("OK", { status: 200 });
 }

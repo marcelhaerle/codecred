@@ -17,8 +17,8 @@ model User {
   image                 String?
   bio                   String?   @db.Text
   username              String    @unique
-  theme                 Json      @default("{}") // Stores theme settings as JSON
-  blocks                Json      @default("[]") // Stores block order and settings as JSON
+  theme                 String    @default("{}")
+  blocks                String    @default("[]")
   termsAccepted         Boolean   @default(false)
   privacyPolicyAccepted Boolean   @default(false)
   scheduledForDeletion  DateTime? // If set, user is scheduled for deletion
