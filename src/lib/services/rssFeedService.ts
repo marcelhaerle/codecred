@@ -18,6 +18,14 @@ export const rssFeedService = {
     });
   },
 
+  getFeed: async (feedId: string): Promise<RssFeed | null> => {
+    const session = await getServerSession(authOptions);
+
+    return await prisma.rssFeed.findUnique({
+      where: { id: feedId, userId: session?.user.id },
+    });
+  },
+
   createFeed: async (url: string): Promise<RssFeed> => {
     const session = await getServerSession(authOptions);
 
@@ -62,6 +70,57 @@ export const rssFeedService = {
     }));
   },
 
+  fetchFeed: async (feed: RssFeed): Promise<number> => {
+    console.log(`Fetching feed: ${feed.url}`);
+
+    try {
+      const parsedFeed = await parser.parseURL(feed.url);
+
+      if (!parsedFeed?.items) {
+        console.warn(`Feed at ${feed.url} has no items. Skipping.`);
+        return 0;
+      }
+
+      const articlesToCache = parsedFeed.items
+        .filter(item => item.title && item.link && item.pubDate) // Ensure essential fields exist
+        .map(item => ({
+          feedId: feed.id,
+          title: item.title!,
+          link: item.link!,
+          pubDate: new Date(item.pubDate!),
+          snippet: item.contentSnippet?.slice(0, 200), // Truncate snippet
+          imageUrl: item.enclosure?.url,
+        }));
+
+      // --- Update Cache in a Transaction ---
+      // A transaction ensures that we either do everything or nothing,
+      // which prevents data inconsistencies if something fails.
+      await prisma.$transaction(async (tx) => {
+        // A. Delete old articles for this feed
+        await tx.cachedArticle.deleteMany({
+          where: { feedId: feed.id },
+        });
+
+        // B. Insert the new articles
+        await tx.cachedArticle.createMany({
+          data: articlesToCache,
+        });
+
+        // C. Update the feed's lastFetchedAt timestamp
+        await tx.rssFeed.update({
+          where: { id: feed.id },
+          data: { lastFetchedAt: new Date() },
+        });
+      });
+
+      return articlesToCache.length;
+
+    } catch (error) {
+      console.error(`Failed to process feed ${feed.url}:`, error);
+      throw error;
+    }
+  },
+
   fetchFeeds: async (): Promise<{
     feedsProcessed: number,
     articlesCached: number,
@@ -85,48 +144,10 @@ export const rssFeedService = {
 
     for (const feed of staleFeeds) {
       try {
-        const parsedFeed = await parser.parseURL(feed.url);
-
-        if (!parsedFeed?.items) {
-          console.warn(`Feed at ${feed.url} has no items. Skipping.`);
-          continue;
-        }
-
-        const articlesToCache = parsedFeed.items
-          .filter(item => item.title && item.link && item.pubDate) // Ensure essential fields exist
-          .map(item => ({
-            feedId: feed.id,
-            title: item.title!,
-            link: item.link!,
-            pubDate: new Date(item.pubDate!),
-            snippet: item.contentSnippet?.slice(0, 200), // Truncate snippet
-            imageUrl: item.enclosure?.url,
-          }));
-
-        // --- Update Cache in a Transaction ---
-        // A transaction ensures that we either do everything or nothing,
-        // which prevents data inconsistencies if something fails.
-        await prisma.$transaction(async (tx) => {
-          // A. Delete old articles for this feed
-          await tx.cachedArticle.deleteMany({
-            where: { feedId: feed.id },
-          });
-
-          // B. Insert the new articles
-          await tx.cachedArticle.createMany({
-            data: articlesToCache,
-          });
-
-          // C. Update the feed's lastFetchedAt timestamp
-          await tx.rssFeed.update({
-            where: { id: feed.id },
-            data: { lastFetchedAt: new Date() },
-          });
-        });
+        const articlesCached = await rssFeedService.fetchFeed(feed);
 
         totalFeedsProcessed++;
-        totalArticlesCached += articlesToCache.length;
-
+        totalArticlesCached += articlesCached;
       } catch (error) {
         console.error(`Failed to process feed ${feed.url}:`, error);
         // Continue to the next feed even if one fails.

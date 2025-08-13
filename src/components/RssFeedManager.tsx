@@ -44,9 +44,9 @@ export default function RssFeedManager() {
       if (!response.ok) {
         throw new Error('Failed to save RSS feed');
       }
-      const updatedFeeds = await response.json();
+      const savedFeed = await response.json();
 
-      setRssFeeds(prevFeeds => [...prevFeeds, updatedFeeds]);
+      setRssFeeds(prevFeeds => [...prevFeeds, savedFeed]);
       return true;
     } catch (err) {
       console.error('Error saving RSS feed:', err);
@@ -72,6 +72,18 @@ export default function RssFeedManager() {
     }
   };
 
+  const handleFetch = async (id: string) => {
+    const fetchResponse = await fetch(`/api/rss/${id}`, {
+      method: 'PUT',
+    });
+
+    if (!fetchResponse.ok) {
+      throw new Error('Failed to fetch RSS feed');
+    }
+    const updatedFeed = await fetchResponse.json();
+
+    setRssFeeds(rssFeeds.map(feed => feed.id === id ? updatedFeed : feed));
+  }
   if (loading) {
     return <LoadingSpinner />;
   }
@@ -83,7 +95,7 @@ export default function RssFeedManager() {
   return (
     <div className="max-w-7xl mx-auto p-6">
       <RssFeedEditor onSave={handleSave} />
-      <RssFeedList rssFeeds={rssFeeds} onDelete={handleDelete} />
+      <RssFeedList rssFeeds={rssFeeds} onDelete={handleDelete} onFetch={handleFetch} />
     </div>
   );
 }
