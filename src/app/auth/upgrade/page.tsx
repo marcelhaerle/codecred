@@ -1,11 +1,11 @@
 import SaasUpgradeManager from "@/components/saas/SaasUpgradeManager";
-import { getAccount } from "@/lib/account";
+import { userService } from "@/lib/services/userService";
 import { redirect } from "next/navigation";
 
 export default async function UpgradePage() {
-  const account = await getAccount();
+  const user = await userService.getCurrentUser();
 
-  if (!account) {
+  if (!user) {
     return redirect("/");
   }
 

@@ -125,6 +125,7 @@ export interface User {
   blocks: ProfileBlock[];
   termsAccepted: boolean;
   privacyPolicyAccepted: boolean;
+  scheduledForDeletion?: string | null; // If the account is scheduled for deletion, this will be the date
 }
 
 export interface RssFeed {
@@ -185,16 +186,4 @@ export interface Project {
   sourceCodeUrl?: string;
   techStack: string[];
   displayOrder: number;
-}
-
-export interface Account {
-  id: string;
-  termsAccepted: boolean;
-  privacyPolicyAccepted: boolean;
-  email: string;
-  username: string;
-  name?: string;
-  bio?: string;
-  image?: string;
-  scheduledForDeletion?: string | null; // If the account is scheduled for deletion, this will be the date
 }

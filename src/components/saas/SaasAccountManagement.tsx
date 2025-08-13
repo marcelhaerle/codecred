@@ -4,16 +4,16 @@ import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { Subscription } from "@/lib/subscription";
 import ManageSubscription from "./ManageSubscription";
-import { Account } from "@/lib/types";
+import { User } from "@/lib/types";
 import SaasDeleteAccount from "./SaasDeleteAccount";
 
 interface SaasAccountManagementProps {
-  account: Account;
+  user: User;
   subscription: Subscription;
 }
 
-export default function SaasAccountManagement({ account: initialAccount, subscription: initialSubscription }: SaasAccountManagementProps) {
-  const [account, setAccount] = useState<Account>(initialAccount);
+export default function SaasAccountManagement({ user: initialUser, subscription: initialSubscription }: SaasAccountManagementProps) {
+  const [user, setUser] = useState<User>(initialUser);
   const [subscription, setSubscription] = useState<Subscription>(initialSubscription);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +46,7 @@ export default function SaasAccountManagement({ account: initialAccount, subscri
       }
 
       const data = await response.json();
-      setAccount(data);
+      setUser(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred while fetching account details");
       return null;
@@ -114,13 +114,13 @@ export default function SaasAccountManagement({ account: initialAccount, subscri
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-8">
         <ManageSubscription
           subscription={subscription}
-          isScheduledForDeletion={account.scheduledForDeletion !== null}
+          isScheduledForDeletion={user.scheduledForDeletion !== null}
           onError={setError}
         />
 
         <SaasDeleteAccount
           subscription={subscription}
-          account={account}
+          user={user}
           onConfirm={handleDeleteAccount}
         />
       </div>
