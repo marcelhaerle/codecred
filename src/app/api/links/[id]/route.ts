@@ -1,15 +1,10 @@
+import { withAuth } from "@/lib/api/with-auth";
 import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
+import { Session } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession();
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const linkId = (await params).id;
+const putHandler = async (req: Request, { session, params }: { session: Session, params: { id: string } }) => {
+  const linkId = params.id;
   const { active } = await req.json();
 
   const link = await prisma.link.update({
@@ -27,14 +22,8 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   return NextResponse.json(link);
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession();
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const linkId = (await params).id;
+const deleteHandler = async (req: Request, { session, params }: { session: Session, params: { id: string } }) => {
+  const linkId = params.id;
 
   await prisma.link.delete({
     where: {
@@ -47,3 +36,6 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   return new NextResponse(null, { status: 204 });
 }
+
+export const PUT = withAuth(putHandler);
+export const DELETE = withAuth(deleteHandler);

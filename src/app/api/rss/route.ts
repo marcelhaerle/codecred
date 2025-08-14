@@ -1,27 +1,14 @@
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { rssFeedService } from "@/lib/services/rssFeedService";
+import { withAuth } from "@/lib/api/with-auth";
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const getHandler = async () => {
   const rssFeeds = await rssFeedService.getFeeds();
 
   return NextResponse.json(rssFeeds);
 }
 
-export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const postHandler = async (req: Request) => {
   const { url } = await req.json();
 
   if (!url || typeof url !== 'string') {
@@ -32,3 +19,6 @@ export async function POST(req: Request) {
 
   return NextResponse.json(newFeed);
 }
+
+export const GET = withAuth(getHandler);
+export const POST = withAuth(postHandler);

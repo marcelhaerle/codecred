@@ -1,17 +1,12 @@
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { userService } from "@/lib/services/userService";
+import { Session } from "next-auth";
+import { withAuth } from "@/lib/api/with-auth";
 
-
-export async function POST() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.id) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
+const postHandler = async (req: NextRequest, { session }: { session: Session }) => {
   await userService.deleteUser(session.user.id);
 
   return new NextResponse("OK", { status: 200 });
 }
+
+export const POST = withAuth(postHandler);

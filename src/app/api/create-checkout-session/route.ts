@@ -1,15 +1,9 @@
-import { authOptions } from "@/lib/auth";
+import { withAuth } from "@/lib/api/with-auth";
 import { createCheckoutSession } from "@/lib/subscription";
-import { getServerSession } from "next-auth";
+import { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const getHandler = async (request: NextRequest, { session }: { session: Session }) => {
   const plan = request.nextUrl.searchParams.get("plan");
 
   if (!plan || (plan !== "STARTER" && plan !== "PRO")) {
@@ -20,3 +14,5 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({ url });
 }
+
+export const GET = withAuth(getHandler);

@@ -1,15 +1,9 @@
-import { authOptions } from "@/lib/auth";
+import { withAuth } from "@/lib/api/with-auth";
 import { userService } from "@/lib/services/userService";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { Session } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const getHandler = async () => {
   try {
     const user = await userService.getCurrentUser();
 
@@ -24,13 +18,7 @@ export async function GET() {
   }
 }
 
-export async function DELETE() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const deleteHandler = async (req: NextRequest, { session }: { session: Session }) => {
   try {
     await userService.deleteUser(session.user.id);
 
@@ -40,3 +28,6 @@ export async function DELETE() {
     return NextResponse.json({ error: "Failed to delete account" }, { status: 500 });
   }
 }
+
+export const GET = withAuth(getHandler);
+export const DELETE = withAuth(deleteHandler);

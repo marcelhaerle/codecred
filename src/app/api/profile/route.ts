@@ -1,18 +1,12 @@
-import { authOptions } from "@/lib/auth";
 import { getProfile, updateProfile } from "@/lib/services/profileService";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { Session } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
 import { Profile } from "@/lib/types";
+import { withAuth } from "@/lib/api/with-auth";
 
 // API route to get user's profile
 // Example usage: GET /api/profile
-export async function GET() {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const getHandler = async (req: NextRequest, { session }: { session: Session }) => {
   const profile = await getProfile(session.user.username);
 
   if (!profile) {
@@ -25,13 +19,7 @@ export async function GET() {
 // API route to update user's profile
 // Example usage: PUT /api/profile
 // Body should contain the updated profile data in JSON format
-export async function PUT(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const putHandler = async (req: Request, { session }: { session: Session }) => {
   const body: Profile = await req.json();
 
   try {
@@ -45,3 +33,6 @@ export async function PUT(req: Request) {
     );
   }
 }
+
+export const GET = withAuth(getHandler);
+export const PUT = withAuth(putHandler);

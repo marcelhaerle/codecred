@@ -1,15 +1,8 @@
-import { authOptions } from "@/lib/auth";
+import { withAuth } from "@/lib/api/with-auth";
 import { createProject, updateProject } from "@/lib/projects";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const postHandler = async (req: Request) => {
   const { title, description, techStack, imageUrl, liveDemoUrl, sourceCodeUrl, displayOrder } = await req.json();
 
   if (!title || !description) {
@@ -37,13 +30,7 @@ export async function POST(req: Request) {
   return NextResponse.json(project);
 }
 
-export async function PUT(req: Request) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const putHandler = async (req: Request) => {
   const { id, title, description, techStack, imageUrl, liveDemoUrl, sourceCodeUrl, displayOrder } = await req.json();
 
   if (!id || !title || !description) {
@@ -71,3 +58,6 @@ export async function PUT(req: Request) {
 
   return NextResponse.json(project);
 }
+
+export const POST = withAuth(postHandler);
+export const PUT = withAuth(putHandler);

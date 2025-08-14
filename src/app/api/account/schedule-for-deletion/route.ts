@@ -1,15 +1,9 @@
 import { prisma } from "@/lib/prisma";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+import { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@/lib/api/with-auth";
 
-export async function DELETE(request: NextRequest) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
+const deleteHandler = async (request: NextRequest, { session }: { session: Session }) => {
   const { expiresAt } = await request.json();
 
   if (!expiresAt) {
@@ -28,3 +22,5 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "Failed to delete account" }, { status: 500 });
   }
 }
+
+export const DELETE = withAuth(deleteHandler);

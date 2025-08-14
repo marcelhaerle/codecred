@@ -1,29 +1,17 @@
+import { withAuth } from "@/lib/api/with-auth";
 import { rssFeedService } from "@/lib/services/rssFeedService";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession();
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const feedId = (await params).id;
+const deleteHandler = async (req: Request, { params }: { params: { id: string } }) => {
+  const feedId = params.id;
 
   await rssFeedService.deleteFeed(feedId);
 
   return new NextResponse(null, { status: 204 });
 }
 
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession();
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const feedId = (await params).id;
+const putHandler = async (req: Request, { params }: { params: { id: string } }) => {
+  const feedId = params.id;
 
   const feed = await rssFeedService.getFeed(feedId);
 
@@ -37,3 +25,6 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
   return NextResponse.json(updatedFeed);
 }
+
+export const DELETE = withAuth(deleteHandler);
+export const PUT = withAuth(putHandler);

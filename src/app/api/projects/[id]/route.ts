@@ -1,16 +1,9 @@
-import { authOptions } from "@/lib/auth";
+import { withAuth } from "@/lib/api/with-auth";
 import { deleteProject } from "@/lib/projects";
-import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const session = await getServerSession(authOptions);
-
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const id = (await params).id;
+const deleteHandler = async (req: Request, { params }: { params: { id: string } }) => {
+  const id = params.id;
 
   if (!id) {
     return NextResponse.json({ error: "ID is required" }, { status: 400 });
@@ -24,3 +17,5 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
 
   return NextResponse.json({ message: "Project deleted successfully" });
 }
+
+export const DELETE = withAuth(deleteHandler);
