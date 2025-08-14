@@ -163,12 +163,6 @@ export interface PinnedRepo {
   } | null;
 }
 
-export interface RssFeed {
-  id: string;
-  url: string;
-  lastFetchedAt: Date | null;
-}
-
 export interface Article {
   title: string;
   link: string;
