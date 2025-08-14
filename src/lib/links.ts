@@ -1,8 +1,5 @@
-
-import { PrismaClient } from "@/generated/prisma/client";
+import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
-
-const prisma = new PrismaClient();
 
 export async function getLinks() {
   const session = await getServerSession();

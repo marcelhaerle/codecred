@@ -1,12 +1,10 @@
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 import { Article, BlockWithData, PinnedRepo, Profile, ProfileBlock, ProfileLink, Project, Theme, ContributionsCollection } from "@/lib/types";
 import { githubDarkTheme } from "@/lib/themes";
 import { getLinksByUsername } from "@/lib/links";
 import { getProjectsByUsername } from "@/lib/projects";
 import { getGithubActivity, getPinnedRepos } from "@/lib/github";
 import { rssFeedService } from "@/lib/services/rssFeedService";
-
-const prisma = new PrismaClient();
 
 /**
  * Fetch a user's profile by their username.

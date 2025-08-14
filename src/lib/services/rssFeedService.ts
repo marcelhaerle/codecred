@@ -1,10 +1,9 @@
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 import Parser from 'rss-parser';
 import { CachedArticle, RssFeed } from "../types";
 import { authOptions } from "../auth";
 import { getServerSession } from "next-auth";
 
-const prisma = new PrismaClient();
 const parser = new Parser();
 
 const MAX_FEED_AGE = 2 * 60 * 60 * 1000;

@@ -1,9 +1,7 @@
-import { PrismaClient } from "@/generated/prisma";
+import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./auth";
 import { Project } from "@/lib/types";
-
-const prisma = new PrismaClient();
 
 export async function getProjectsByUsername(username: string): Promise<Project[]> {
   const projects = await prisma.project.findMany({
@@ -28,7 +26,6 @@ export async function getProjectsByUsername(username: string): Promise<Project[]
     displayOrder: project.displayOrder || 0,
   }));
 }
-
 
 export async function getProjects(): Promise<Project[]> {
   const session = await getServerSession(authOptions);
