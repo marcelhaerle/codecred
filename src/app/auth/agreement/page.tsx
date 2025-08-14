@@ -10,7 +10,7 @@ export default function AgreementPage() {
   const handleContinue = async () => {
     if (termsAccepted && privacyPolicyAccepted) {
       try {
-        const res = await fetch('/api/auth/accept-agreement', {
+        const res = await fetch('/api/account/accept-agreement', {
           method: 'POST',
         });
         if (res.ok) {
@@ -26,7 +26,7 @@ export default function AgreementPage() {
 
   const handleDecline = async () => {
     try {
-      await fetch('/api/auth/decline-agreement', {
+      await fetch('/api/account/decline-agreement', {
         method: 'POST',
       });
     } catch (error) {
