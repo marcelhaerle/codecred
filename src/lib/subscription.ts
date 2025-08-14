@@ -1,3 +1,5 @@
+import { env } from "@/lib/env";
+
 export interface Subscription {
   plan: "NONE" | "STARTER" | "PRO";
   currentPeriodEnd: string; // ISO date string
@@ -6,9 +8,9 @@ export interface Subscription {
 }
 
 export async function getSubscriptionStatus(userId: string | null): Promise<Subscription> {
-  const response = await fetch(`${process.env.SUBCRIPTION_SERVICE_URL}/api/status?userId=${userId}`, {
+  const response = await fetch(`${env.SUBCRIPTION_SERVICE_URL}/api/status?userId=${userId}`, {
     headers: {
-      "Authorization": `Bearer ${process.env.SUBSCRIPTION_SERVICE_API_KEY}`,
+      "Authorization": `Bearer ${env.SUBSCRIPTION_SERVICE_API_KEY}`,
     },
   });
 
@@ -28,11 +30,11 @@ export async function getSubscriptionStatus(userId: string | null): Promise<Subs
 
 export async function createCheckoutSession(userId: string, plan: "STARTER" | "PRO", userEmail: string): Promise<string> {
   try {
-    const response = await fetch(`${process.env.SUBCRIPTION_SERVICE_URL}/api/create-checkout-session`, {
+    const response = await fetch(`${env.SUBCRIPTION_SERVICE_URL}/api/create-checkout-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.SUBSCRIPTION_SERVICE_API_KEY}`,
+        "Authorization": `Bearer ${env.SUBSCRIPTION_SERVICE_API_KEY}`,
       },
       body: JSON.stringify({ userId, plan, userEmail }),
     });
@@ -52,11 +54,11 @@ export async function createCheckoutSession(userId: string, plan: "STARTER" | "P
 
 export async function createCustomPortalSession(userId: string): Promise<string> {
   try {
-    const response = await fetch(`${process.env.SUBCRIPTION_SERVICE_URL}/api/create-customer-portal-session`, {
+    const response = await fetch(`${env.SUBCRIPTION_SERVICE_URL}/api/create-customer-portal-session`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.SUBSCRIPTION_SERVICE_API_KEY}`,
+        "Authorization": `Bearer ${env.SUBSCRIPTION_SERVICE_API_KEY}`,
       },
       body: JSON.stringify({ userId }),
     });
@@ -76,11 +78,11 @@ export async function createCustomPortalSession(userId: string): Promise<string>
 
 export async function cancelSubscription(userId: string): Promise<Date> {
   try {
-    const response = await fetch(`${process.env.SUBCRIPTION_SERVICE_URL}/api/cancel-subscription`, {
+    const response = await fetch(`${env.SUBCRIPTION_SERVICE_URL}/api/cancel-subscription`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.SUBSCRIPTION_SERVICE_API_KEY}`,
+        "Authorization": `Bearer ${env.SUBSCRIPTION_SERVICE_API_KEY}`,
       },
       body: JSON.stringify({ userId }),
     });

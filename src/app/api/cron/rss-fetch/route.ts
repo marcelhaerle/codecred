@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rssFeedService } from '@/lib/services/rssFeedService';
+import { env } from '@/lib/env';
 
 export async function GET(req: NextRequest) {
   // --- Security Check ---
   // Protect the endpoint with a secret key passed as a bearer token.
-  if (req.headers.get('Authorization') !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (req.headers.get('Authorization') !== `Bearer ${env.CRON_SECRET}`) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 

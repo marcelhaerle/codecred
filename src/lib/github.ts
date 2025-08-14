@@ -1,5 +1,6 @@
 import { PinnedRepo, ContributionsCollection, GitHubActivityResponse, PinnedRepoResponse } from "@/lib/types";
 import { Octokit } from "@octokit/core";
+import { env } from "@/lib/env";
 
 const ActivityQuery = `
 query UserActivity($username: String!, $limit: Int = 10) {
@@ -51,7 +52,7 @@ query UserActivity($username: String!, $limit: Int = 10) {
 
 export async function getGithubActivity(username: string): Promise<ContributionsCollection | null> {
   try {
-    const octokit = new Octokit({ auth: process.env.GITHUB_PAT });
+    const octokit = new Octokit({ auth: env.GITHUB_PAT });
 
     try {
       const res = await octokit.graphql<GitHubActivityResponse>(ActivityQuery, {
@@ -97,7 +98,7 @@ const PinnedReposQuery = `
 `;
 
 export async function getPinnedRepos(username: string): Promise<PinnedRepo[]> {
-  const octokit = new Octokit({ auth: process.env.GITHUB_PAT });
+  const octokit = new Octokit({ auth: env.GITHUB_PAT });
 
   try {
     const res = await octokit.graphql<PinnedRepoResponse>(PinnedReposQuery, {

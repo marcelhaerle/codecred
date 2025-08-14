@@ -4,13 +4,14 @@ import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { prisma } from '@/lib/prisma';
 import { githubDarkTheme } from "./themes";
 import { User } from "@/generated/prisma";
+import { env } from "@/lib/env";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
+      clientId: env.GITHUB_ID as string,
+      clientSecret: env.GITHUB_SECRET as string,
       profile(profile) {
         return {
           id: profile.id.toString(),
@@ -55,7 +56,7 @@ export const authOptions: AuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
 }
 
 export async function getCurrentUser(): Promise<User | null> {
