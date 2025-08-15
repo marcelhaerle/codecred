@@ -8,8 +8,11 @@ const envSchema = z.object({
   NEXTAUTH_SECRET: z.string().min(1),
   GITHUB_PAT: z.string(),
   CRON_SECRET: z.string().min(1),
-  SUBCRIPTION_SERVICE_URL: z.url(),
-  SUBSCRIPTION_SERVICE_API_KEY: z.string().min(1),
+  STRIPE_SECRET_KEY: z.string().min(1),
+  STRIPE_PRICE_ID_STARTER: z.string().min(1),
+  STRIPE_PRICE_ID_PRO: z.string().min(1),
+  STRIPE_CANCEL_URL: z.url(),
+  STRIPE_SUCCESS_URL: z.url(),
 });
 
 // Validate the environment variables

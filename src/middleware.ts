@@ -1,6 +1,6 @@
 import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
-import { getSubscriptionStatus } from "./lib/subscription";
 import { NextResponse } from "next/server";
+import { SUBSCRIPTION_PLAN } from "./lib/types";
 
 export default withAuth(async function (request: NextRequestWithAuth) {
   const termsAccepted = request.nextauth?.token?.termsAccepted;
@@ -14,11 +14,10 @@ export default withAuth(async function (request: NextRequestWithAuth) {
 
   // Check if user has an active subscription
   // If not, redirect to upgrade page
-  const userId = request.nextauth?.token?.id || null;
-  const subscription = await getSubscriptionStatus(userId);
+  const plan: SUBSCRIPTION_PLAN = request.nextauth?.token?.plan as SUBSCRIPTION_PLAN || SUBSCRIPTION_PLAN.NONE;
   const isUpgradePage = request.nextUrl.pathname.startsWith("/auth/upgrade");
 
-  if (subscription.plan === "NONE" && !isUpgradePage && !isAgreementPage) {
+  if (plan === SUBSCRIPTION_PLAN.NONE && !isUpgradePage && !isAgreementPage) {
     return NextResponse.redirect(new URL("/auth/upgrade", request.url));
   }
 }, {

@@ -1,5 +1,6 @@
 import { withAuth } from "@/lib/api/with-auth";
-import { createCheckoutSession } from "@/lib/subscription";
+import { subscriptionService } from "@/lib/services/subscriptionService";
+import { SUBSCRIPTION_PLAN } from "@/lib/types";
 import { Session } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -10,7 +11,7 @@ const getHandler = async (request: NextRequest, { session }: { session: Session 
     return NextResponse.json({ error: "Invalid plan specified" }, { status: 400 });
   }
 
-  const url = await createCheckoutSession(session.user.id, plan, session.user.email);
+  const url = await subscriptionService.createCheckoutSession(session.user.id, plan as SUBSCRIPTION_PLAN);
 
   return NextResponse.json({ url });
 }

@@ -1,3 +1,4 @@
+import { SUBSCRIPTION_PLAN } from '@/lib/types';
 import 'next-auth';
 
 declare module 'next-auth' {
@@ -6,6 +7,7 @@ declare module 'next-auth' {
     user?: {
       id?: string;
       username?: string;
+      plan?: SUBSCRIPTION_PLAN;
     } & DefaultSession['user'];
   }
 

@@ -4,7 +4,7 @@ import { Boxes, EyeOff, Zap } from "lucide-react";
 
 export default function StarterPlanSubscription() {
   const startCheckout = async () => {
-    const response = await fetch(`/api/saas/create-checkout-session?plan=STARTER`);
+    const response = await fetch(`/api/create-checkout-session?plan=STARTER`);
 
     if (!response.ok) {
       const errorData = await response.json();

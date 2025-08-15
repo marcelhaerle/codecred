@@ -43,6 +43,9 @@ export const userService = {
       bio: user.bio || "",
       image: user.image || "",
       scheduledForDeletion: user.scheduledForDeletion ? new Date(user.scheduledForDeletion).toISOString() : null,
+      stripeSubscriptionId: user.stripeSubscriptionId || undefined,
+      stripePendingCancellation: user.stripePendingCancellation || false,
+      stripeExpiresAt: user.stripeExpiresAt || undefined,
     };
-  }
+  },
 }

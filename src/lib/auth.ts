@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { githubDarkTheme } from "./themes";
 import { User } from "@/generated/prisma";
 import { env } from "@/lib/env";
+import { subscriptionService } from "./services/subscriptionService";
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -21,8 +22,8 @@ export const authOptions: AuthOptions = {
           username: profile.login,
           bio: profile.bio,
           // Default theme for new users
-          theme: githubDarkTheme,
-          blocks: [], // Initialize with an empty array for blocks
+          theme: JSON.stringify(githubDarkTheme),
+          blocks: "[]", // Initialize with an empty array for blocks
           termsAccepted: profile.termsAccepted,
           privacyPolicyAccepted: profile.privacyPolicyAccepted,
         };
@@ -39,10 +40,12 @@ export const authOptions: AuthOptions = {
         token.accessToken = account.access_token;
       }
       if (user) {
+        const subscription = await subscriptionService.getStatus(user.id);
         token.id = user.id;
         token.username = user.username;
         token.termsAccepted = user.termsAccepted;
         token.privacyPolicyAccepted = user.privacyPolicyAccepted;
+        token.plan = subscription.plan;
       }
       return token;
     },

@@ -1,6 +1,6 @@
 import AccountManagement from "@/components/subscription/AccountManagement";
+import { subscriptionService } from "@/lib/services/subscriptionService";
 import { userService } from "@/lib/services/userService";
-import { getSubscriptionStatus } from "@/lib/subscription";
 import { redirect } from "next/navigation";
 
 export default async function AccountPage() {
@@ -10,7 +10,7 @@ export default async function AccountPage() {
     return redirect("/");
   }
 
-  const subscription = await getSubscriptionStatus(user.id);
+  const subscription = await subscriptionService.getStatus(user.id);
 
   return (
     <div className="max-w-6xl mx-auto mt-24 p-4">

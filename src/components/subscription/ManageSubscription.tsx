@@ -1,11 +1,11 @@
 "use client";
 
-import { Subscription } from "@/lib/subscription";
+import { SubscriptionStatus } from "@/lib/types";
 import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
 
 interface ManageSubscriptionProps {
-  subscription: Subscription;
+  subscription: SubscriptionStatus;
   isScheduledForDeletion: boolean;
   onError: (error: string) => void;
 }
@@ -52,7 +52,7 @@ export default function ManageSubscription({ subscription, isScheduledForDeletio
         ) : (
           <div className="flex justify-between items-center">
             <p className="text-gray-400">Renews on</p>
-            <p className="text-white font-semibold">{new Date(subscription.currentPeriodEnd).toLocaleDateString()}</p>
+            <p className="text-white font-semibold">{new Date(subscription.currentPeriodEnd!).toLocaleDateString()}</p>
           </div>
         )}
       </div>

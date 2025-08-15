@@ -126,6 +126,9 @@ export interface User {
   termsAccepted: boolean;
   privacyPolicyAccepted: boolean;
   scheduledForDeletion?: string | null; // If the account is scheduled for deletion, this will be the date
+  stripeSubscriptionId?: string;
+  stripePendingCancellation?: boolean;
+  stripeExpiresAt?: Date;
 }
 
 export interface RssFeed {
@@ -180,4 +183,17 @@ export interface Project {
   sourceCodeUrl?: string;
   techStack: string[];
   displayOrder: number;
+}
+
+export enum SUBSCRIPTION_PLAN {
+  NONE = "NONE",
+  STARTER = "STARTER",
+  PRO = "PRO",
+}
+
+export interface SubscriptionStatus {
+  plan: SUBSCRIPTION_PLAN;
+  currentPeriodEnd?: Date;
+  pendingCancellation?: boolean;
+  expiresAt?: Date;
 }

@@ -2,23 +2,23 @@
 
 import { RefreshCcw } from "lucide-react";
 import { useState } from "react";
-import { Subscription } from "@/lib/subscription";
+import { SubscriptionStatus } from "@/lib/types";
 import ManageSubscription from "./ManageSubscription";
 import { User } from "@/lib/types";
 import SaasDeleteAccount from "./DeleteAccount";
 
 interface AccountManagementProps {
   user: User;
-  subscription: Subscription;
+  subscription: SubscriptionStatus;
 }
 
 export default function AccountManagement({ user: initialUser, subscription: initialSubscription }: AccountManagementProps) {
   const [user, setUser] = useState<User>(initialUser);
-  const [subscription, setSubscription] = useState<Subscription>(initialSubscription);
+  const [subscription, setSubscription] = useState<SubscriptionStatus>(initialSubscription);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchSubscription = async (): Promise<Subscription | null> => {
+  const fetchSubscription = async (): Promise<SubscriptionStatus | null> => {
     try {
       const response = await fetch("/api/subscription/status");
 
